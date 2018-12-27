@@ -1,0 +1,161 @@
+一、alert
+	普通弹窗
+	要求：
+		颜色可以自定义
+		要有弹出的效果
+		显示的内容要源码显示
+		
+		
+二、comfrim
+	选择性弹窗
+	要求：
+		颜色可以自定义
+		要有弹出的效果
+		显示的内容要源码显示
+		要有回调函数
+			success
+				true
+			error
+				false
+三、prompt
+	输入框弹窗
+	要求：
+		颜色可以自定义
+		要有弹出的效果
+		可以输入
+			success
+				value
+			error
+				null
+
+四、loginView
+	登入视图
+	要求：
+		颜色可以自定义
+		要有弹出的效果
+		标题、logo，协议、勾选框，注册、登入、忘记密码
+		用户名、密码、确认密码、验证码、密码审核、密码条件性筛选(简、中、难)
+		用户在输入的时候可以有回调函数。
+		
+五、stringJudge
+	字符串判断
+	要求:
+		判断出字符串的难度性(简、中、难)
+		获取字符串的长度
+		字符串条件性筛选 ：数字、字母（大小写）、汉子、
+
+六、openFrame
+	子级页面弹窗
+	要求：
+		颜色可以自定义
+		要有弹出的效果
+		能拖拽、放大、缩小、关闭
+		
+七、timeConversion
+	时间转换
+	
+八、base64encode
+	字符串加密
+	
+九、utf8to16
+	字符串解密
+	
+十、pictrueLayer
+	图片布局
+	
+十一、pictureView
+	图片展示
+	
+十二、banner
+	轮播图
+
+十三、isPhone
+	手机号码判断
+	
+十四、getType
+	获取数据的类型
+	
+十五、insertFile
+	添加文件（css/js）
+
+十六、precisionBar
+	进度条
+	
+十七、paging
+	分页
+
+十八、KJNovaClipper
+	图片裁剪
+
+十九、slide
+	滑块
+	
+二十、navi
+	官网导航
+
+二十一、checkbox
+	复选框
+
+二十二、radio
+	单选
+	
+二十三、linkage
+	联动
+
+二十三、table
+	表格
+
+二十四、updateStyle
+	样式修改
+
+二十五、cookie
+	页面cookie
+
+二十六、getUrlParam
+	获取链接的参数
+
+二十七、cache
+	缓存处理
+	
+二十八、pictureLazy
+	图片懒加载
+
+二十九、getRandomNumber
+	获取随机数
+	
+三十、compression
+	图片压缩
+
+三十一、showCode
+	显示源码
+
+三十二、replaceAll
+	替换字符串
+
+三十二、cascadeFlow
+	瀑布流
+
+三十三、getMaxZIndex
+	获取页面中最高z-index值
+	并从大到小的排序
+
+三十四、mouseRightClick
+	鼠标右击事件
+
+三十五、mouseLongPress
+	鼠标长按事件
+
+三十六:toast
+	提示
+
+三十七、passwordInput
+	密码输入框
+
+三十八、rate
+	评分
+
+三十九、stepper 
+	进步器
+
+
+
