@@ -1,0 +1,141 @@
+@charset "utf-8";
+*{margin:0;padding:0;font-family:Microsoft YaHei;}
+
+
+.my-tools_back {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+	display:flex;
+	align-items:center;
+}
+
+.tools-fadeIn{
+	animation-duration : 0.1s;
+	animation:fadeIn 0.5s;
+	-moz-animation:fadeIn 0.5s; /* Firefox */
+	-webkit-animation:fadeIn 0.5s; /* Safari and Chrome */
+	-o-animation:fadeIn 0.5s; /* Opera */
+}
+.tools-fadeOut{
+	animation-duration : 0.1s;
+	animation:fadeOut 0.5s;
+	-moz-animation:fadeOut 0.5s; /* Firefox */
+	-webkit-animation:fadeOut 0.5s; /* Safari and Chrome */
+	-o-animation:fadeOut 0.5s; /* Opera */
+}
+
+@keyframes fadeIn
+{
+0% {opacity:0;transform: scale(.9);}
+100% {opacity:100;transform: scale(1);}
+}
+
+@-moz-keyframes fadeIn /* Firefox */
+{
+0% {opacity:0;transform: scale(.9);}
+100% {opacity:100;transform: scale(1);}
+}
+
+@-webkit-keyframes fadeIn /* Safari and Chrome */
+{
+0% {opacity:0;transform: scale(.9);}
+100% {opacity:100;transform: scale(1);}
+}
+
+@-o-keyframes fadeIn /* Opera */
+{
+0% {opacity:0;transform: scale(.9);}
+100% {opacity:100;transform: scale(1);}
+}
+
+@keyframes fadeOut
+{
+0% {opacity:100;transform:scale(1)}
+100% {opacity:0;transform:scale(0.9)}
+}
+
+@-moz-keyframes fadeIn /* Firefox */
+{
+0% {opacity:100;transform:scale(1)}
+100% {opacity:0;transform:scale(0.9)}
+}
+
+@-webkit-keyframes fadeIn /* Safari and Chrome */
+{
+0% {opacity:100;transform:scale(1)}
+100% {opacity:0;transform:scale(0.9)}
+}
+
+
+.my-tools_alert {
+    background: #fff;
+    margin: 0 auto;
+    border-radius: 2px;
+    -webkit-background-clip: content;
+    border-radius: 2px;
+    box-shadow: 1px 1px 10px rgba(0,0,0,.3);
+    display: inline-block;
+    position: relative;
+    max-width: 400px;
+}
+
+.my-tools_alert_title {
+    padding: 0 80px 0 20px;
+    height: 42px;
+    line-height: 42px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+    overflow: hidden;
+    background-color: #F8F8F8;
+    border-radius: 2px 2px 0 0;
+}
+
+span.my-tools_alert_close {
+    position: absolute;
+    font-size: 20px;
+    width: 20px;
+    height: 42px;
+    right: 0;
+    top: 0;
+    line-height: 36px;
+    color: #2b2a31;
+    cursor: pointer;
+}
+
+span.my-tools_alert_close:hover {
+    color: #929292;
+}
+
+.my-tools_alert_val {
+    padding: 20px 60px;
+}
+
+.my-tools_alert_btn_box {
+    text-align: center;
+    padding: 10px 15px 12px;
+}
+
+.my-tools_btn:hover{
+	opacity: .9;
+    text-decoration: none;
+}
+
+span.my_tools_alert_btn {
+    height: 28px;
+    line-height: 28px;
+    margin: 5px 5px 0;
+    padding: 2px 18px;
+    border: 1px solid #dedede;
+    border-radius: 2px;
+    font-weight: 400;
+    cursor: pointer;
+    text-decoration: none;
+    border-color: #1E9FFF;
+    background-color: #1E9FFF;
+    color: #fff;
+    font-size: 14px;
+}
