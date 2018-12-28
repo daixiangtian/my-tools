@@ -2,22 +2,84 @@
 	<head>
 		<title>my-tools Test</title>
 		<script src="./script/my-tools.js" charset="UTF-8"></script>
-	</head>
-	<body>
-	</body>
-	<script>
+		<style>
+		.img-box-list{
+			text-align:center;
+		}
+			.img-box{
+				width : 150px;
+				height:150px;
+				margin : 20px;
+				display:inline-block;
+				overflow:hidden;
+			}
+			p{
+				text-align:center;
+				font-size:18px;
+			}
+			.load-img-box{
+				width:150px;
+				height:150px;
+				overflow:hidden;
+			}
+		</style>
+		<script>
 		
 		let myTools = new MyTools();
 		myTools.introduceFile({
 			url:"./css/my-tools.css",
 			type:"css"
 		})
-		myTools.comfrim('请选择',(bool)=>{
-			if(bool){
-				myTools.alert('用户点击了确认')
-			}else{
-				myTools.alert('用户点击了取消或关闭')
-			}
-		})
+		
 	</script>
+	</head>
+	<body>
+		<span class="my-tools_prompt_btn my-tools_btn my-tools_btn_y" onclick="myTools.alert('这个是alert弹窗')">alert</span>
+		<span class="my-tools_prompt_btn my-tools_btn my-tools_btn_y" onclick="myTools.comfrim('这个是comfrim弹窗')">comfrim</span>
+		<span class="my-tools_prompt_btn my-tools_btn my-tools_btn_y" onclick="myTools.prompt('这个是prompt弹窗')">prompt</span>
+		</br>
+		<p>图片自适应布局</p>
+		<div class="img-box-list">
+			<div class="img-box">
+				<img onload="myTools.pictrueLayer(this)" src="http://pic1.win4000.com/mobile/5/5289af8a54c69_130_170.jpg" />
+			</div>
+			<div class="img-box">
+				<img onload="myTools.pictrueLayer(this)" src="http://p0.ifengimg.com/pmop/2018/0119/09C1786DD14A70BF576D4F04005F6F16473D7540_size48_w532_h800.jpeg" />
+			</div>
+			<div class="img-box">
+				<img onload="myTools.pictrueLayer(this)"  src="http://www.ilife.cn/images/upload/info/beauty/other_images/8_20141021105616_1.jpg" />
+			</div>
+			<div class="img-box">
+				<img onload="myTools.pictrueLayer(this)"  src="http://image.fsyule.net/2017-01-10/b43b3ef9a00912407bfd331913399d7e.jpg" />
+			</div>
+			<div class="img-box">
+				<img onload="myTools.pictrueLayer(this)"  src="http://img1.voc.com.cn/UpLoadFile/2014/07/17/201407171139598760.png" />
+			</div>
+			<div class="img-box">
+				<img onload="myTools.pictrueLayer(this)"  src="http://img.ixinwei.com/iww201805/123992.jpg" />
+			</div>
+		</div>
+		<div class="load-img-box">
+			<loading data-src="http://pic1.win4000.com/mobile/5/5289af8a54c69_130_170.jpg" data-pictrue-layer=true></loading>
+		</div>
+		<div class="load-img-box">
+		<loading data-src="http://www.ilife.cn/images/upload/info/beauty/other_images/8_20141021105616_1.jpg" data-pictrue-layer=true></loading>
+		</div>
+		<div class="load-img-box">
+		<loading data-src="http://image.fsyule.net/2017-01-10/b43b3ef9a00912407bfd331913399d7e.jpg" data-pictrue-layer=true></loading>
+		</div>
+		<div class="load-img-box">
+		<loading data-src="http://img1.voc.com.cn/UpLoadFile/2014/07/17/201407171139598760.png" data-pictrue-layer=true></loading>
+		</div>
+		<div class="load-img-box">
+		<loading data-src="http://img.ixinwei.com/iww201805/123992.jpg" data-pictrue-layer=true></loading>
+		</div>
+		<div class="load-img-box">
+		<loading data-src="http://p0.ifengimg.com/pmop/2018/0119/09C1786DD14A70BF576D4F04005F6F16473D7540_size48_w532_h800.jpeg" data-pictrue-layer=true></loading>
+		</div>
+	</body>
+	
 </html>
+<script>
+	myTools.lazy();
+</script>

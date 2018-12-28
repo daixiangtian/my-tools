@@ -70,7 +70,7 @@
 }
 
 
-.my-tools_alert,.my-tools_comfrim {
+.my-tools_alert,.my-tools_comfrim,.my-tools_prompt {
     background: #fff;
     margin: 0 auto;
     border-radius: 2px;
@@ -82,7 +82,7 @@
     max-width: 400px;
 }
 
-.my-tools_alert_title,.my-tools_comfrim_title {
+.my-tools_alert_title,.my-tools_comfrim_title,.my-tools_prompt_title {
     padding: 0 80px 0 20px;
     height: 42px;
     line-height: 42px;
@@ -94,7 +94,7 @@
     border-radius: 2px 2px 0 0;
 }
 
-span.my-tools_alert_close,span.my-tools_comfrim_close {
+span.my-tools_alert_close,span.my-tools_comfrim_close,span.my-tools_prompt_close {
     position: absolute;
     font-size: 20px;
     width: 20px;
@@ -106,20 +106,20 @@ span.my-tools_alert_close,span.my-tools_comfrim_close {
     cursor: pointer;
 }
 
-span.my-tools_comfrim_close:hover ,span.my-tools_comfrim_close:hover {
+span.my-tools_comfrim_close:hover ,span.my-tools_comfrim_close:hover,span.my-tools_prompt_close:hover {
     color: #929292;
 }
 
-.my-tools_alert_val,.my-tools_comfrim_val {
+.my-tools_alert_val,.my-tools_comfrim_val,.my-tools_prompt_val,.my-tools_prompt_content {
     padding: 20px 60px;
 }
 
-.my-tools_alert_btn_box,.my-tools_comfrim_btn_box {
+.my-tools_alert_btn_box,.my-tools_comfrim_btn_box,.my-tools_prompt_btn_box {
     text-align: center;
     padding: 10px 15px 12px;
 }
 
-.my-tools_btn:hover,.my-tools_btn:hover{
+.my-tools_btn:hover{
 	opacity: .8;
     text-decoration: none;
 }
@@ -136,14 +136,86 @@ span.my-tools_comfrim_close:hover ,span.my-tools_comfrim_close:hover {
     color: #333;
 }
 
-span.my-tools_alert_btn,span.my-tools_comfrim_btn {
+span.my-tools_alert_btn,span.my-tools_comfrim_btn,span.my-tools_prompt_btn {
     height: 28px;
     line-height: 28px;
     margin: 5px 5px 0;
-    padding: 2px 18px;
+    padding: 4px 18px;
     border-radius: 2px;
     font-weight: 400;
     cursor: pointer;
     text-decoration: none;
     font-size: 14px;
+}
+
+p.my-tools_prompt_old_value {
+    margin-bottom: 20px;
+    max-width: 280px;
+}
+
+input.my-tools_prompt_input {
+    padding: 5px;
+    display: block;
+    width: 100%;
+}
+.my-tools_scale{
+	cursor:pointer;
+	transition: all 0.6s;
+}
+
+.my-tools_scale:hover{
+	transform:scale(1.3);
+}
+
+.spinner {
+  margin: auto;
+  height: 60px;
+  text-align: center;
+  font-size: 10px;
+}
+ 
+.spinner > div {
+  background-color: #67CF22;
+  height: 100%;
+  width: 4px;
+  display: inline-block;
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+  margin:0 2px;
+  border-radius:4px;
+}
+ 
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+ 
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+ 
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+ 
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+ 
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) } 
+  20% { -webkit-transform: scaleY(1.0) }
+}
+ 
+@keyframes stretchdelay {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% {
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
 }

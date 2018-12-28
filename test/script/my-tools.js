@@ -4,8 +4,7 @@
 */
 
 function MyTools(){
-	
-	const doc = document,body = doc.body,_this = this;
+	let doc,body,_this = this;
 	
 	MyTools.mainBack = "#eee";
 	
@@ -92,7 +91,7 @@ function MyTools(){
 	}
 	// 获取页面里面最大的z-index值
 	MyTools.prototype.getMaxZIndex = function(){
-		var arr = [...document.all].map(e => +window.getComputedStyle(e).zIndex || 0);
+		let arr = [...document.all].map(e => +window.getComputedStyle(e).zIndex || 0);
 		return arr.length ? Math.max(...arr) + 1 : 0
 	}
 	// 弹入的效果
@@ -137,17 +136,21 @@ function MyTools(){
 	}
 	// 显示html源码显示
 	MyTools.prototype.showCode = function( v ){
-		var p = [
+		let p = [
 			{o:'<',n:'&lt;'},
 			{o:'>',n:'&gt;'},
 			{o:'\'',n:'&quot;'}
 		]
-		for(var i=0;i<p.length;i++)v = v.split(p[i].o).join(p[i].n);
+		for(let i=0;i<p.length;i++)v = v.split(p[i].o).join(p[i].n);
 		return v;
 	}
 	// 修改HTML
 	MyTools.prototype.html = function(o,h,c){
-		o.innerHTML = h;
+		if(_this.judgeType(h) == 'function')h = h();
+		if(_this.judgeType(h) == 'dom')h = h.outerHTML;
+		if(_this.judgeType(o) == 'object' && o.length > 0)for(let i=0;i < o.length;i++){o[i].innerHTML = h;}
+		
+		if(_this.judgeType(o) == 'dom')o.innerHTML = h;
 		if(c){
 			return c
 		}else{
@@ -165,7 +168,12 @@ function MyTools(){
 	}
 	// 创建dom元素
 	MyTools.prototype.create = function( s ){
+		if(_this.judgeType(doc) != "dom"){
+			doc = document;
+			body = doc.body;
+		}
 		let d = doc.createElement(s);
+		doc.createElement(s);
 		return d;
 	}
 	// 阻止事件冒泡
@@ -177,21 +185,30 @@ function MyTools(){
 			return this;
 		}
 	}
+	// 查找元素
+	MyTools.prototype.queryDom = function( s ){
+		if(!doc){
+			doc = document;
+			body = doc.body
+		}
+		if(s.indexOf('#') ===0 ){
+			return doc.querySelector(s);
+		}else{
+			return doc.querySelectorAll(s)
+		}
+	}
 	// 设置dom属性
 	/*
 	MyTools.prototype.attr = function(o,...a,c){
 		if(this.judgeType(a) == 'json'){
 			for( let ai in a )o.setAttribute(ai = s[ai]);
-		}else if(this.judgeType(a) == 'string'){
-			
-		}
+		}else if(this.judgeType(a) == 'string'){}
 	}
 	*/
-	
 	// 弹出框
 	MyTools.prototype.alert = function(txt){
 		let p = this.create('div'),		//背景层
-			b = this.create('div'),		//内容层
+			b = this.create('div'),		//内容框
 			t = this.create('div'),		//标题
 			c = this.create('span'),	//关闭按钮
 			v = this.create('div'),		//显示值
@@ -216,7 +233,7 @@ function MyTools(){
 	// 选择性弹窗
 	MyTools.prototype.comfrim = function(txt,f){
 		let p = this.create('div'),		//背景层
-			b = this.create('div'),		//内容层
+			b = this.create('div'),		//内容框
 			t = this.create('div'),		//标题
 			c = this.create('span'),	//关闭按钮
 			v = this.create('div'),		//显示值
@@ -239,6 +256,155 @@ function MyTools(){
 				this.onclick = null;
 				_this.fadeOut(b,() =>{_this.remove(p);f&&f(this.bool);})
 			})
-			yb.onclick = (()=>{_this.remove(p);f&&f(this.bool);})
+			yb.onclick = (()=>{
+				this.onclick = null;
+				_this.fadeOut(b,() =>{_this.remove(p);f&&f(this.bool);})
+			})
 	}
+	// 输入型弹窗
+	MyTools.prototype.prompt = function( txt ,f){
+		let p = this.create('div'),			//背景层
+			b = this.create('div'),			//内容框
+			t = this.create('div'),			//标题
+			c = this.create('span'),		//关闭按钮
+			co = this.create('div'),		//内容层
+			ov = this.create('p'),			//原来的数据
+			inp = this.create('input'),		//输入框
+			y = this.create('div'),			// 装载按钮的框
+			yb = this.create('span'),		//确认按钮
+			nb = this.create('span');		//取消按钮
+			
+		this.append(body,p).addClass(p,'my-tools_back')
+		.append(p,b).addClass(b,'my-tools_prompt','tools-fadeIn')
+		.append(b,t).addClass(t,'my-tools_prompt_title')
+		.append(b,c).addClass(c,'my-tools_prompt_close')
+		.append(b,co).addClass(co,'my-tools_prompt_content')
+		.append(co,ov).addClass(ov,'my-tools_prompt_old_value')
+		.append(co,inp).addClass(inp,'my-tools_prompt_input')
+		.append(b,y).addClass(y,'my-tools_prompt_btn_box')
+		.append(y,nb).addClass(nb,'my-tools_prompt_btn','my-tools_btn','my-tools_btn_n')
+		.append(y,yb).addClass(yb,'my-tools_prompt_btn','my-tools_btn','my-tools_btn_y')
+		.html(c,'x').html(t,'标题').html(ov,this.showCode(txt)).html(yb,'确认').html(nb,'取消')
+		.updateStyle(p,"zIndex:"+this.getMaxZIndex()).fadeIn(p).stop(p,'click');
+		yb.bool = true;nb.bool = false;c.bool = false;
+		nb.onclick = c.onclick = (()=> {
+			this.onclick = null;
+			_this.fadeOut(b,() =>{_this.remove(p);})
+		})
+		yb.onclick = (()=>{
+			this.onclick = null;
+			_this.fadeOut(b,() =>{_this.remove(p);f&&f(inp.value);})
+		})
+	}
+	//图片自适应布局
+	MyTools.prototype.pictrueLayer = function(c,f){
+		if(c.parentNode || c.parent){
+			let p = c.parentNode || c.parent,
+			pw = p.clientWidth,
+				ph = p.clientHeight,
+				iw = c.width,
+				ih = c.height;
+			if(iw > ih){
+				_this.updateStyle(c,{
+					height : ph + "px",
+					width : ph / ih * iw + "px",
+					marginLeft : -((ph / ih * iw - pw) / 2) + "px"
+				})
+			}else if(iw < ih){
+				_this.updateStyle(c,{
+					width : pw + "px",
+					height : pw/iw*ih + "px",
+					marginTop : -((pw/iw*ih - ph) / 2 )+"px"
+				})
+			}else{
+				_this.updateStyle(c,{
+					width : pw + "px",
+					height : ph + "px",
+				})
+			}
+			_this.addClass(c,'my-tools_scale')
+			f&&fn(c);
+		}
+	}
+	// 获取dom的实际top值
+	MyTools.prototype.offsetTop = function(o){
+		let top = 0;
+		while ( o != document.body && o){
+			top += o.offsetTop;
+			o = o.parentNode;
+		};
+		return top;
+	}
+	// loading样式
+	MyTools.prototype.loading = function(o){
+		let b = _this.create('div');
+			_this.addClass(b,'spinner')
+			for(let i=1;i<=5;i++){
+				r = _this.create('div');
+				_this.append(b,r).addClass(r,'rect'+i);
+			}
+		if(o)_this.append(o,b);
+		return b;
+	}
+	//替换dom元素
+	MyTools.prototype.replaceDom = function( o ,n ){
+		if(!o)return this;
+		let p = o.parentNode;
+			p&&p.insertBefore(n,o);
+			p&&p.removeChild(o);
+		return this;
+	}
+	// 获取window的宽和高
+	MyTools.prototype.winSize = function(){
+		let e = window,a = 'inner';
+		if (!('innerWidth' in window )){ 
+			a = 'client'; 
+			e = document.documentElement || document.body; 
+		};
+		return { width : e[ a+'Width' ] , height : e[ a+'Height' ] }; 
+	}
+	
+	//图片懒加载
+	MyTools.prototype.lazy = function(){
+		let ls = _this.queryDom('loading');
+		_this.html(ls,_this.loading);
+		
+		function imgShow(){
+			for ( let i=ls.length-1;i>=0;i-- ){
+				let top = _this.offsetTop( ls[i] );
+				let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+				if ( top < ( scrollTop + _this.winSize().height ) && ls[i]){
+					let img = _this.create('img');
+						if(ls[i].dataset.pictrueLayer){
+							img.parent = ls[i].parentNode;
+							img.setAttribute('onload','myTools.pictrueLayer(this)');
+						}
+						img.src = ls[i].dataset.src;
+					delete ls[i];
+					setTimeout(()=>{
+						_this.replaceDom(ls[i],img);
+						
+					},100)
+				}
+			}
+		};
+		imgShow();
+		window.onscroll = imgShow;
+	}
+	
+	MyTools.prototype.slice = function(o,i,n){
+		let arr = [];
+		if(_this.judgeType(o) == 'object' && o.length > 0)for(let i=0;i<o.length;i++)arr.push(o[i]);
+		
+		arr.slice(i,n);
+		
+		return arr;
+		
+	}
+	
+	// 上拉加载，下拉刷新
+	MyTools.prototype.scroll = function( p ){
+		
+	}
+	
 }
