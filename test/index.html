@@ -3,7 +3,7 @@
 		<title>my-tools Test</title>
 		<script src="./script/my-tools.js" charset="UTF-8"></script>
 	</head>
-	<body onclick="alert(123)">
+	<body>
 	</body>
 	<script>
 		
@@ -11,6 +11,13 @@
 		myTools.introduceFile({
 			url:"./css/my-tools.css",
 			type:"css"
+		})
+		myTools.comfrim('请选择',(bool)=>{
+			if(bool){
+				myTools.alert('用户点击了确认')
+			}else{
+				myTools.alert('用户点击了取消或关闭')
+			}
 		})
 	</script>
 </html>

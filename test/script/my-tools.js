@@ -104,7 +104,7 @@ function MyTools(){
 	// 弹出效果
 	MyTools.prototype.fadeOut = function( d,f ){
 		this.addClass(d,'tools-fadeOut');
-		setTimeout(()=>{f&&f()},500);
+		setTimeout(()=>{f&&f()},450);
 		return this;
 	}
 	// 添加class名
@@ -177,6 +177,17 @@ function MyTools(){
 			return this;
 		}
 	}
+	// 设置dom属性
+	/*
+	MyTools.prototype.attr = function(o,...a,c){
+		if(this.judgeType(a) == 'json'){
+			for( let ai in a )o.setAttribute(ai = s[ai]);
+		}else if(this.judgeType(a) == 'string'){
+			
+		}
+	}
+	*/
+	
 	// 弹出框
 	MyTools.prototype.alert = function(txt){
 		let p = this.create('div'),		//背景层
@@ -184,7 +195,7 @@ function MyTools(){
 			t = this.create('div'),		//标题
 			c = this.create('span'),	//关闭按钮
 			v = this.create('div'),		//显示值
-			y = this.create('div'),		//确认按钮框
+			y = this.create('div'),		//按钮框
 			yb = this.create('span');	//确认按钮
 			
 			this.append(body,p).addClass(p,'my-tools_back')
@@ -193,14 +204,41 @@ function MyTools(){
 			.append(b,c).addClass(c,'my-tools_alert_close')
 			.append(b,v).addClass(v,'my-tools_alert_val')
 			.append(b,y).addClass(y,'my-tools_alert_btn_box')
-			.append(y,yb).addClass(yb,'my_tools_alert_btn','my-tools_btn')
+			.append(y,yb).addClass(yb,'my-tools_alert_btn','my-tools_btn','my-tools_btn_y')
 			.html(c,'x').html(t,'标题').html(v,this.showCode(txt)).html(yb,'确认')
 			.updateStyle(p,"zIndex:"+this.getMaxZIndex()).fadeIn(p).stop(p,'click');
-			yb.onclick = c.onclick = function(){
+			yb.onclick = c.onclick = (() =>{
 				this.onclick = null;
 				_this.fadeOut(b,() =>{_this.remove(p);})
-			}
+			})
 		return void 0;
 	}
-	
+	// 选择性弹窗
+	MyTools.prototype.comfrim = function(txt,f){
+		let p = this.create('div'),		//背景层
+			b = this.create('div'),		//内容层
+			t = this.create('div'),		//标题
+			c = this.create('span'),	//关闭按钮
+			v = this.create('div'),		//显示值
+			y = this.create('div'),		//确认按钮框
+			yb = this.create('span'),	//确认按钮
+			nb = this.create('span');	//取消按钮
+			
+			this.append(body,p).addClass(p,'my-tools_back')
+			.append(p,b).addClass(b,'my-tools_comfrim','tools-fadeIn')
+			.append(b,t).addClass(t,'my-tools_comfrim_title')
+			.append(b,c).addClass(c,'my-tools_comfrim_close')
+			.append(b,v).addClass(v,'my-tools_comfrim_val')
+			.append(b,y).addClass(y,'my-tools_comfrim_btn_box')
+			.append(y,nb).addClass(nb,'my-tools_comfrim_btn','my-tools_btn','my-tools_btn_n')
+			.append(y,yb).addClass(yb,'my-tools_alert_btn','my-tools_btn','my-tools_btn_y')
+			.html(c,'x').html(t,'标题').html(v,this.showCode(txt)).html(yb,'确认').html(nb,'取消')
+			.updateStyle(p,"zIndex:"+this.getMaxZIndex()).fadeIn(p).stop(p,'click');
+			yb.bool = true;nb.bool = false;c.bool = false;
+			nb.onclick = c.onclick = (()=> {
+				this.onclick = null;
+				_this.fadeOut(b,() =>{_this.remove(p);f&&f(this.bool);})
+			})
+			yb.onclick = (()=>{_this.remove(p);f&&f(this.bool);})
+	}
 }

@@ -70,7 +70,7 @@
 }
 
 
-.my-tools_alert {
+.my-tools_alert,.my-tools_comfrim {
     background: #fff;
     margin: 0 auto;
     border-radius: 2px;
@@ -82,7 +82,7 @@
     max-width: 400px;
 }
 
-.my-tools_alert_title {
+.my-tools_alert_title,.my-tools_comfrim_title {
     padding: 0 80px 0 20px;
     height: 42px;
     line-height: 42px;
@@ -94,7 +94,7 @@
     border-radius: 2px 2px 0 0;
 }
 
-span.my-tools_alert_close {
+span.my-tools_alert_close,span.my-tools_comfrim_close {
     position: absolute;
     font-size: 20px;
     width: 20px;
@@ -106,36 +106,44 @@ span.my-tools_alert_close {
     cursor: pointer;
 }
 
-span.my-tools_alert_close:hover {
+span.my-tools_comfrim_close:hover ,span.my-tools_comfrim_close:hover {
     color: #929292;
 }
 
-.my-tools_alert_val {
+.my-tools_alert_val,.my-tools_comfrim_val {
     padding: 20px 60px;
 }
 
-.my-tools_alert_btn_box {
+.my-tools_alert_btn_box,.my-tools_comfrim_btn_box {
     text-align: center;
     padding: 10px 15px 12px;
 }
 
-.my-tools_btn:hover{
-	opacity: .9;
+.my-tools_btn:hover,.my-tools_btn:hover{
+	opacity: .8;
     text-decoration: none;
 }
 
-span.my_tools_alert_btn {
+.my-tools_btn_y{
+	background-color: #1E9FFF;
+	border-color: #1E9FFF;
+	color: #fff;
+}
+
+.my-tools_btn_n{
+	border: 1px solid #dedede;
+    background-color: #fff;
+    color: #333;
+}
+
+span.my-tools_alert_btn,span.my-tools_comfrim_btn {
     height: 28px;
     line-height: 28px;
     margin: 5px 5px 0;
     padding: 2px 18px;
-    border: 1px solid #dedede;
     border-radius: 2px;
     font-weight: 400;
     cursor: pointer;
     text-decoration: none;
-    border-color: #1E9FFF;
-    background-color: #1E9FFF;
-    color: #fff;
     font-size: 14px;
 }
