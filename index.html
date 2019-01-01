@@ -1,4 +1,151 @@
 <html>
-	
-
+	<head>
+		<title>my-tools.js</title>
+		<script src="./test/script/my-tools.js" charset="UTF-8"></script>
+		<script src="./test/script/my-tools-document.js" charset="UTF-8"></script>
+	</head>
+	<body>
+	</body>
+	<script>
+		let myTools = new MyTools();
+		myTools.introduceFile({
+			url:"./test/css/my-tools.css",
+			type:"css"
+		})
+		myTools.introduceFile({
+			url:"./test/css/index.css",
+			type:"css"
+		})
+		myTools.createEntity({
+			parent : document.body,
+			el : 'div',
+			id : 'page',
+			childrens:[
+				{
+					el : 'div',
+					id : 'page-top',
+					childrens : [
+						{
+							el : 'div',
+							className : 'js-name',
+							html : 'my-tools.js'
+						},
+						{
+							el : 'span',
+							className: 'author',
+							html : '戴向天',
+						}
+					]
+				},{
+					el : 'div',
+					id : 'page-content',
+					childrens:[
+						{
+							el : 'div',
+							className : 'page-content_left',
+							childrens(){
+								let arr = ["判断浏览器","引入js/css文件","判断数据类型","更新样式",
+											"获取最高层级","弹入的效果","弹出效果","添加class名","删除class名",
+											"添加dom元素","删除dom元素","显示html源码显示","修改HTML",
+											"修改TEXT","创建dom元素","阻止事件冒泡","查找元素","设置dom属性",
+											"设置dom的data值","dom函数赋值","弹出框","选择性弹窗","输入型弹窗",
+											"图片自适应布局","loading样式","替换dom元素","获取window的宽和高",
+											"图片懒加载","快速创建实体"
+										],
+										childrens = [],
+										len = arr.length;
+								
+									for(let i=0;i<len;i++){
+									childrens.push({
+										el:'li',
+										className:'method-name',
+										html : arr[i],
+										methods:{
+											click(){
+												let lis = myTools.queryDom(".method-name"),
+													boxs = myTools.queryDom(".method-details");
+												myTools.removeClass(lis,'active');
+												myTools.removeClass(boxs,'show');
+												myTools.addClass(this,'active');
+												myTools.addClass(boxs[i],'show');
+											}
+										}
+									})
+									}
+								return childrens;
+							}
+						},{
+							el : 'div',
+							className : 'page-content_center',
+							childrens(){
+								let childrens = [];
+									len = myToolsDoc.length;
+								
+								for(let i=0;i<len;i++){
+									childrens.push({
+										el : 'div',
+										className:'method-details',
+										childrens : [
+											{
+												el : 'div',
+												className:'method-title',
+												html: myToolsDoc[i].name
+											},{
+												el : 'p',
+												className:'method-desc',
+												html : myToolsDoc[i].desc
+											},{
+												el : 'p',
+												className:'method-param',
+												html : '参数描述：'
+											},{
+												el : 'pre',
+												className : 'method-param_info',
+												html:myToolsDoc[i].param
+											},{
+												el:'p',
+												className:'method-code_title',
+												html:'代码：'
+											},{
+												el : 'pre',
+												className :'method-code',
+												html : myToolsDoc[i].code
+											},{
+												el : 'div',
+												className: 'method-result',
+												childrens:[
+													{
+														el : 'p',
+														className :'method-result_title',
+														html : '返回结果：'
+													},{
+														el : 'pre',
+														html : myToolsDoc[i].result
+													}
+												]
+											},{
+												el:'div',
+												className:'method-btns',
+												childrens:[
+													{
+														el:'button',
+														className : 'method-btns_btn',
+														html : '查看效果'
+													}
+												]
+											}
+										]
+									})
+								}
+								
+								return childrens;
+							}
+						}
+					]
+				}
+			]
+		},function(){
+			myTools.queryDom(".method-name")[0].click();
+		})
+	</script>
 </html>

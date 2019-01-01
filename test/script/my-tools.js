@@ -116,6 +116,20 @@ function MyTools(){
 		}
 		return this;
 	}
+	// 删除class名
+	MyTools.prototype.removeClass = function(o,...p){
+		
+		if(_this.judgeType(o) == 'object' && o.length){
+			for(let i=0;i<o.length;i++){
+				o[i].classList.remove(p)
+			}
+		}else if(_this.judgeType(o) == 'dom'){
+			o.classList.remove(p)
+		}
+		
+		
+		return this;
+	}
 	// 添加dom元素
 	MyTools.prototype.append = function(p,o,c){
 		p.appendChild(o);
@@ -198,13 +212,25 @@ function MyTools(){
 		}
 	}
 	// 设置dom属性
-	/*
-	MyTools.prototype.attr = function(o,...a,c){
-		if(this.judgeType(a) == 'json'){
-			for( let ai in a )o.setAttribute(ai = s[ai]);
-		}else if(this.judgeType(a) == 'string'){}
+	MyTools.prototype.attr = function(o,a,c){
+		
+		for(ai in a){
+			o.setAttribute(ai,a[ai]);
+		}
+		return this;
 	}
-	*/
+	// 设置dom的data值
+	MyTools.prototype.setData = function(o,d){
+		for(di in d){
+			o.dataset[di] = d[di]
+		}
+		return this;
+	}
+	// dom函数赋值
+	MyTools.prototype.setMethods = function(o,m){
+		for(mi in m)o.addEventListener(mi,m[mi],false);
+		return this;
+	}
 	// 弹出框
 	MyTools.prototype.alert = function(txt){
 		let p = this.create('div'),		//背景层
@@ -298,8 +324,7 @@ function MyTools(){
 	}
 	//图片自适应布局
 	MyTools.prototype.pictrueLayer = function(c,f){
-		if(c.parentNode || c.parent){
-			let p = c.parentNode || c.parent,
+			let p = c.parentNode,
 			pw = p.clientWidth,
 				ph = p.clientHeight,
 				iw = c.width,
@@ -324,16 +349,6 @@ function MyTools(){
 			}
 			_this.addClass(c,'my-tools_scale')
 			f&&fn(c);
-		}
-	}
-	// 获取dom的实际top值
-	MyTools.prototype.offsetTop = function(o){
-		let top = 0;
-		while ( o != document.body && o){
-			top += o.offsetTop;
-			o = o.parentNode;
-		};
-		return top;
 	}
 	// loading样式
 	MyTools.prototype.loading = function(o){
@@ -363,28 +378,27 @@ function MyTools(){
 		};
 		return { width : e[ a+'Width' ] , height : e[ a+'Height' ] }; 
 	}
-	
 	//图片懒加载
 	MyTools.prototype.lazy = function(){
-		let ls = _this.queryDom('loading');
-		_this.html(ls,_this.loading);
-		
 		function imgShow(){
+			let ls = _this.queryDom('loading');
+			_this.html(ls,_this.loading);
+			var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 			for ( let i=ls.length-1;i>=0;i-- ){
-				let top = _this.offsetTop( ls[i] );
-				let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-				if ( top < ( scrollTop + _this.winSize().height ) && ls[i]){
-					let img = _this.create('img');
-						if(ls[i].dataset.pictrueLayer){
-							img.parent = ls[i].parentNode;
-							img.setAttribute('onload','myTools.pictrueLayer(this)');
-						}
-						img.src = ls[i].dataset.src;
-					delete ls[i];
+				let top = ls[i].offsetTop;
+				if(top < scrollTop + _this.winSize().height&& !ls[i].isLoad){
+					ls[i].isLoad = true;
 					setTimeout(()=>{
+						let img = new Image();
+							img.src = ls[i].dataset.src;
 						_this.replaceDom(ls[i],img);
-						
-					},100)
+						if(ls[i].dataset.pictrueLayer){
+							img.addEventListener('load',() =>{
+								_this.pictrueLayer(img);
+							},false)
+						}
+					},200)
+					
 				}
 			}
 		};
@@ -395,16 +409,118 @@ function MyTools(){
 	MyTools.prototype.slice = function(o,i,n){
 		let arr = [];
 		if(_this.judgeType(o) == 'object' && o.length > 0)for(let i=0;i<o.length;i++)arr.push(o[i]);
-		
 		arr.slice(i,n);
 		
 		return arr;
 		
 	}
 	
-	// 上拉加载，下拉刷新
+	// 上拉加载，下拉刷新 适用于移动端
 	MyTools.prototype.scroll = function( p ){
-		
+		let o = p.el,
+			r = p.onRefresh,		//刷新的时候执行函数
+			l = p.onLoad,			//上拉的时候执行函数
+			m = p.onMove,			//再滚动的时候执行函数
+			dropDownMax = 100,		//下拉的最大值			默认100
+			scrollTop = 0,			//当前元素的scrollTop值 默认0
+			sx =0,					//手指进入时的坐标
+			ex =0,					//手指离开时的坐标
+			dx = 0,					//滚动的高度
+			dDom = _this.create('div'),
+			
+			hasPanel = false,		//是否有添加面板
+			touch = {
+				start : (e)=>{
+					let touch = e.touches[0];
+					sx = +touch.pageX; //页面触点X坐标
+					sy = +touch.pageY; //页面触点Y坐标
+					dx = +o.scrollTop;
+					if(dx >= o.scrollHeight - o.clientHeight){
+						let panel = _this.create('div');	//面板
+							_this.updateStyle(panel,{
+								position:"absolute",
+								top : 0,
+								left : 0,
+								width:"100%",
+								height:"100%",
+								background:"red"
+							})
+						_this.updateStyle(o,{
+							position:"fixed",
+							top:-dx+"px"
+						})
+						
+					}
+				},
+				move : (e)=>{
+					let touch = e.touches[0];
+					ex = +touch.pageX; //页面触点X坐标
+					if(dx >= o.scrollHeight - o.clientHeight){
+						dDom.style.height = Math.abs(sx-ex) + "px";
+					}
+				},
+				end : (e) =>{
+					
+				},
+			}
+			o.style.overflow = "auto";
+			o.style.position = "relative";
+			dDom.innerHTML = "加载更多";
+			dDom.style.background = "#eee";
+			o.appendChild(dDom);
+			o.addEventListener('touchstart',touch.start)
+			o.addEventListener('touchmove',touch.move)
+			o.addEventListener('touchend',touch.end)
+			
 	}
 	
+	/* 快速创建 */
+	MyTools.prototype.createEntity = function( p,f ){
+		
+		let cs = p.childrens;
+		
+		let el = _this.create(p.el);
+		if(p.className)_this.addClass(p.className);
+		if(p.style)_this.updateStyle(el,p.style);
+		if(p.attr)_this.attr(el,p.attr);
+		if(p.data)_this.setData(el,p.data);
+		if(p.methods)_this.setMethods(el,p.methods);
+		if(p.id)el.setAttribute('id',p.id);
+		function createChild( p , j ){
+			j.forEach(v=>{
+				let vs = v.childrens;
+				let el = _this.create(v.el);
+				if(v.className)_this.addClass(el,v.className);
+				if(v.style)_this.updateStyle(el,v.style);
+				if(v.attr)_this.attr(el,v.attr);
+				if(v.data)_this.setData(el,v.data);
+				if(v.methods)_this.setMethods(el,v.methods);
+				if(v.id)el.setAttribute('id',v.id);
+				_this.append(p,el);
+				
+				if(v.html || v.html == ''){
+					_this.html(el,v.html)
+				}else if(vs){
+					if(_this.judgeType(vs) == 'function'){
+						vs = vs();
+					}
+					createChild(el,vs);
+				}
+			})
+		}
+		if(p.html || p.html == ''){
+			_this.html(el,p.html)
+		}else if(cs){
+			if(_this.judgeType(cs) == 'function'){
+				cs = cs();
+			}
+			createChild(el,cs);
+		}
+		
+		if(p.parent)_this.append(p.parent,el);
+		
+		f&&f(el);
+		return el;
+	}
+	return this;
 }

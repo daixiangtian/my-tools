@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>my-tools Test</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 		<script src="./script/my-tools.js" charset="UTF-8"></script>
 		<style>
 		.img-box-list{
@@ -21,6 +22,7 @@
 				width:150px;
 				height:150px;
 				overflow:hidden;
+				margin:50px auto;
 			}
 		</style>
 		<script>
@@ -78,8 +80,59 @@
 		<loading data-src="http://p0.ifengimg.com/pmop/2018/0119/09C1786DD14A70BF576D4F04005F6F16473D7540_size48_w532_h800.jpeg" data-pictrue-layer=true></loading>
 		</div>
 	</body>
-	
 </html>
 <script>
 	myTools.lazy();
+	let load = document.querySelector('loading');
+	
+	let el = myTools.createEntity({
+		parent : document.body,
+		el : 'div',
+		id : 'testId',
+		className : 'testClass',
+		style:{
+			background : "red",
+			width : "50px",
+			height:"50px"
+		},
+		attr:{
+			ss : 'ss',
+			dataSs : 'dataSs'
+		},
+		data:{
+			id : 'id',
+			jj : 'dd'
+		},
+		childrens:[
+			{
+				el : 'span',
+				className : 'testSpan',
+				style:{
+					fontSize : '12px',
+					color : '#fff'
+				},
+				childrens:[
+					{
+						el: 'i',
+						className: 'testI',
+						html : "这个是i标签"
+					}
+				],
+				methods:{
+					click(e){
+					}
+				}
+			},
+			{
+				el : 'font',
+				className : 'testFont'
+			}
+		],
+		methods:{
+			click : function(){
+				alert(this);
+			}
+		}
+	})
+	
 </script>
