@@ -321,5 +321,27 @@ let myToolsDoc = [
 		result:`
 		dom元素
 		`
+	},{
+		name:'设置dom属性(attr)',
+		desc:'该方法可以设置被选元素的属性和值。',
+		param:`
+		第一个参数：dom元素
+		第二个参数：json
+		`,
+		code:`
+		let myTools = new MyTools(),
+		
+		div = document.querySelector('div');
+		
+		myTools.attr(div,{
+			id:'attrId',
+			index : 1
+		})
+		`,
+		result:`
+		dom元素
+		`
+	},{
+		name:'设置dom的data值（setData）'
 	}
 ]

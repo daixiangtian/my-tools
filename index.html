@@ -137,7 +137,6 @@
 										]
 									})
 								}
-								
 								return childrens;
 							}
 						}
@@ -146,6 +145,22 @@
 			]
 		},function(){
 			myTools.queryDom(".method-name")[0].click();
+			window.onscroll = function(){
+				let div = myTools.queryDom('.page-content_left')[0];
+				if(this.scrollY >= 80){
+					myTools.updateStyle(div,{
+						position:'fixed',
+						top:0,
+						height: myTools.winSize().height,
+						overflow:'auto'
+					})
+				}else{
+					myTools.updateStyle(div,{
+						position:'sticky',
+						height:'auto'
+					})
+				}
+			}
 		})
 	</script>
 </html>

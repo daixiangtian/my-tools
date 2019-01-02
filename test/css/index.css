@@ -29,17 +29,17 @@ div#page-content {
     margin-top: 20px;
     background: #eee;
     overflow: hidden;
-    display: flex;
 }
 
 .page-content_left {
     width: 200px;
     background: #fff;
+    float: left;
 }
 
 .page-content_center {
     width: 800px;
-    margin: 0 0 0 20px;
+    margin: 0 0 0 220px;
 }
 
 .page-content_right {
