@@ -73,7 +73,7 @@ let myToolsDoc = [
 		`
 	},{
 		name:'更新样式（updateStyle）',
-		desc:'该方法可以动态更改dom元素的样式，使用方式与JQuery很像，不过第一个该方法的第一个参数值是dom元素，调用该方法后，dom元素将会给予行内样式</br></br>（tips:行内样式的优先级是最高的）',
+		desc:'该方法可以动态更改dom元素的样式，使用方式与JQuery很像，不过第一个该方法的第一个参数值是dom元素，调用该方法后，dom元素将会给予行内样式&lt;/br>&lt;/br>（tips:行内样式的优先级是最高的）',
 		param:`
 			dom : dom元素
 			json: 样式json,
@@ -112,7 +112,7 @@ let myToolsDoc = [
 		`
 	},{
 		name:'弹入的效果（fadeIn）',
-		desc:'该方法的能赋予指定的dom元素一个弹入的感觉，类似JQuery的fedaIn。该方法的弹入时间是固定死的500毫秒</br></br>（tips:展示效果需要配合my-tools.css。my-tools.css在myTools.js加载的时候自动就进行动态添加）',
+		desc:'该方法的能赋予指定的dom元素一个弹入的感觉，类似JQuery的fedaIn。该方法的弹入时间是固定死的500毫秒&lt;/br>&lt;/br>（tips:展示效果需要配合my-tools.css。my-tools.css在myTools.js加载的时候自动就进行动态添加）',
 		param:`
 		dom:元素,
 		event : 回调函数
@@ -132,7 +132,7 @@ let myToolsDoc = [
 		`
 	},{
 		name:'弹出效果（fadeOut）',
-		desc:'该方法的能赋予指定的dom元素一个弹入的感觉，类似JQuery的fedaOut。该方法的弹入时间是固定死的500毫秒</br></br>（tips:展示效果需要配合my-tools.css。my-tools.css在myTools.js加载的时候自动就进行动态添加）',
+		desc:'该方法的能赋予指定的dom元素一个弹入的感觉，类似JQuery的fedaOut。该方法的弹入时间是固定死的500毫秒&lt;/br>&lt;/br>（tips:展示效果需要配合my-tools.css。my-tools.css在myTools.js加载的时候自动就进行动态添加）',
 		param:`
 		dom:元素,
 		event : 回调函数
@@ -342,6 +342,216 @@ let myToolsDoc = [
 		dom元素
 		`
 	},{
-		name:'设置dom的data值（setData）'
+		name:'设置dom的data值（setData）',
+		desc:"该方法可以设置dom元素的data属性值",
+		param:`
+		第一个参数：dom元素
+		第二个参数：json
+		`,
+		code:`
+		let myTools = new MyTools(),
+		
+		div = document.querySelector('div');
+		
+		myTools.setData(div,{
+			name:'my-tools'
+		})
+		`,
+		result:`
+		MyTools对象
+		`
+	},{
+		name:'dom函数赋值（setMethods）',
+		desc:'该方法可以给dom元素进行添加监听事件，可进行多个函数方法',
+		param:`
+		第一个参数：dom元素
+		第二个参数：json
+		`,
+		code:`
+		let myTools = new MyTools(),
+		
+		div = document.querySelector('div');
+		
+		myTools.setMethods(div,{
+			click:function(){
+				alert('你好！');
+			},
+			click:function(){
+				alert("我很好！");
+			},
+			mousedown:function(){
+				alert("鼠标被按下了！")
+			}
+		})
+		`,
+		result:`
+		MyTools对象
+		`
+	},{
+		name:'弹出框（alert）',
+		desc:'自定义弹出',
+		param:`
+		string
+		`,
+		code:`
+		let myTools = new MyTools();
+		
+		myTools.alert('你好啊！');
+		`,
+		result:`
+		MyTools对象
+		`
+	},{
+		name:'选择性弹窗（confrim）',
+		desc:'用户选择性弹窗',
+		param:`
+		string,
+		Event:回调函数
+		`,
+		code:`
+		let myTools = new MyTools();
+		
+		myTools.confirm("你好啊！",function(result){
+			if(result){
+				alert('您点击了确定')
+			}else{
+				alert('您点击了取消，或者是关闭')
+			}
+		})
+		`,
+		result:`
+		MyTools对象
+		`
+	},{
+		name:'输入型弹窗（prompt）',
+		desc:'调用该方法，这就会弹出输入型的框子',
+		param:`
+		string,
+		Event:回调函数
+		`,
+		code:`
+		let myTools = new MyTools();
+		
+		myTools.prompt("你好啊！",function(result){
+			alert(result);
+		})
+		`,
+		result:`
+		MyTools对象
+		`
+	},{
+		name :'图片自适应布局（pictrueLayer）',
+		desc:'该方法可以是图片进行自适应的布局，选择中间部分',
+		param:`
+		第一个参数：dom元素
+		Event：回调函数
+		`,
+		code:`
+		let myTools = new MyTools();
+		
+		&lt;div style="width:50px;height:50px">
+			&lt;img src="/img/pictrue.jpg" onload="myTools.pictrueLayer(this)" />
+		&lt;/div>
+		
+		`,
+		result:`
+		MyTools对象
+		`
+	},{
+		name:'loading样式（loading）',
+		desc:'该方法会创建一个loading dom元素，并返回',
+		param:`
+		第一个参数：dom元素（需要添加loading的元素）
+		`,
+		code:`
+		let myTools = new MyTools();
+		
+		div = document.querySelector('div');
+		
+		myTools.loading(div);
+		`,
+		resutl:`
+		loading dom元素
+		`
+	},{
+		name:'替换dom元素（replaceDom）',
+		desc:'该方法可以直接进行替换dom元素',
+		param:`
+		第一个参数：dom元素 （需要被替换的dom元素）
+		第二个参数：dom元素	（新的dom元素）
+		`,
+		code:`
+		let myTools = new MyTools(),
+		
+		div = document.querySelector('div'),
+		
+		span = document.createElement('span');
+		
+		span.innerHTML = "这个是span标签";
+		
+		myTools.replaceDom(div,span);
+		`,
+		result:`
+		MyTools对象
+		`
+	},{
+		name:'获取window的宽和高（winSize）',
+		desc:'该方法可以获取window的宽度和高度，并返回',
+		param:`
+		无
+		`,
+		code:`
+		let myTools = new MyTools();
+		
+		alert(JSON.stringify(myTools.winSize()));
+		`,
+		result:`
+		{
+			width:number,
+			height:number
+		}
+		`
+	},{
+		name:'图片懒加载（lazy）',
+		desc:'该方法会自动去查找loading标签，然后通过lazy的方法进行替换成img data-src 则就是图片的路径',
+		param:`
+		无参数
+		`,
+		code:`
+		
+		.load-img-box{
+			width:50px;
+			height:50px;
+			overflow:hidden;
+		}
+		
+		&lt;div class="load-img-box">
+			&lt;loading data-src="http://pic1.win4000.com/mobile/5/5289af8a54c69_130_170.jpg" data-pictrue-layer=true>&lt;/loading>
+		&lt;/div>
+		&lt;div class="load-img-box">
+			&lt;loading data-src="http://www.ilife.cn/images/upload/info/beauty/other_images/8_20141021105616_1.jpg" data-pictrue-layer=true>&lt;/loading>
+		&lt;/div>
+		&lt;div class="load-img-box">
+			&lt;loading data-src="http://image.fsyule.net/2017-01-10/b43b3ef9a00912407bfd331913399d7e.jpg" data-pictrue-layer=true>&lt;/loading>
+		&lt;/div>
+		&lt;div class="load-img-box">
+			&lt;loading data-src="http://img1.voc.com.cn/UpLoadFile/2014/07/17/201407171139598760.png" data-pictrue-layer=true>&lt;/loading>
+		&lt;/div>
+		&lt;div class="load-img-box">
+			&lt;loading data-src="http://img.ixinwei.com/iww201805/123992.jpg" data-pictrue-layer=true>&lt;/loading>
+		&lt;/div>
+		&lt;div class="load-img-box">
+			&lt;loading data-src="http://p0.ifengimg.com/pmop/2018/0119/09C1786DD14A70BF576D4F04005F6F16473D7540_size48_w532_h800.jpeg" data-pictrue-layer=true>&lt;/loading>
+		&lt;/div>
+		
+		let myTools = new MyTools();
+		
+		myTools.lazy();
+		`,
+		result:`
+		MyTools对象
+		`
+	},{
+		name:'快速创建实体（createEntity）',
 	}
 ]

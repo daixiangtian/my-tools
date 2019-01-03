@@ -70,7 +70,7 @@
 }
 
 
-.my-tools_alert,.my-tools_comfrim,.my-tools_prompt {
+.my-tools_alert,.my-tools_confrim,.my-tools_prompt {
     background: #fff;
     margin: 0 auto;
     border-radius: 2px;
@@ -82,7 +82,7 @@
     max-width: 400px;
 }
 
-.my-tools_alert_title,.my-tools_comfrim_title,.my-tools_prompt_title {
+.my-tools_alert_title,.my-tools_confrim_title,.my-tools_prompt_title {
     padding: 0 80px 0 20px;
     height: 42px;
     line-height: 42px;
@@ -94,7 +94,7 @@
     border-radius: 2px 2px 0 0;
 }
 
-span.my-tools_alert_close,span.my-tools_comfrim_close,span.my-tools_prompt_close {
+span.my-tools_alert_close,span.my-tools_confrim_close,span.my-tools_prompt_close {
     position: absolute;
     font-size: 20px;
     width: 20px;
@@ -106,15 +106,15 @@ span.my-tools_alert_close,span.my-tools_comfrim_close,span.my-tools_prompt_close
     cursor: pointer;
 }
 
-span.my-tools_comfrim_close:hover ,span.my-tools_comfrim_close:hover,span.my-tools_prompt_close:hover {
+span.my-tools_confrim_close:hover ,span.my-tools_confrim_close:hover,span.my-tools_prompt_close:hover {
     color: #929292;
 }
 
-.my-tools_alert_val,.my-tools_comfrim_val,.my-tools_prompt_val,.my-tools_prompt_content {
+.my-tools_alert_val,.my-tools_confrim_val,.my-tools_prompt_val,.my-tools_prompt_content {
     padding: 20px 60px;
 }
 
-.my-tools_alert_btn_box,.my-tools_comfrim_btn_box,.my-tools_prompt_btn_box {
+.my-tools_alert_btn_box,.my-tools_confrim_btn_box,.my-tools_prompt_btn_box {
     text-align: center;
     padding: 10px 15px 12px;
 }
@@ -136,7 +136,7 @@ span.my-tools_comfrim_close:hover ,span.my-tools_comfrim_close:hover,span.my-too
     color: #333;
 }
 
-span.my-tools_alert_btn,span.my-tools_comfrim_btn,span.my-tools_prompt_btn {
+span.my-tools_alert_btn,span.my-tools_confrim_btn,span.my-tools_prompt_btn {
     height: 28px;
     line-height: 28px;
     margin: 5px 5px 0;

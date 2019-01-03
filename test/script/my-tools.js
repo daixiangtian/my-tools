@@ -254,10 +254,10 @@ function MyTools(){
 				this.onclick = null;
 				_this.fadeOut(b,() =>{_this.remove(p);})
 			})
-		return void 0;
+		return this;
 	}
 	// 选择性弹窗
-	MyTools.prototype.comfrim = function(txt,f){
+	MyTools.prototype.confrim = function(txt,f){
 		let p = this.create('div'),		//背景层
 			b = this.create('div'),		//内容框
 			t = this.create('div'),		//标题
@@ -268,12 +268,12 @@ function MyTools(){
 			nb = this.create('span');	//取消按钮
 			
 			this.append(body,p).addClass(p,'my-tools_back')
-			.append(p,b).addClass(b,'my-tools_comfrim','tools-fadeIn')
-			.append(b,t).addClass(t,'my-tools_comfrim_title')
-			.append(b,c).addClass(c,'my-tools_comfrim_close')
-			.append(b,v).addClass(v,'my-tools_comfrim_val')
-			.append(b,y).addClass(y,'my-tools_comfrim_btn_box')
-			.append(y,nb).addClass(nb,'my-tools_comfrim_btn','my-tools_btn','my-tools_btn_n')
+			.append(p,b).addClass(b,'my-tools_confrim','tools-fadeIn')
+			.append(b,t).addClass(t,'my-tools_confrim_title')
+			.append(b,c).addClass(c,'my-tools_confrim_close')
+			.append(b,v).addClass(v,'my-tools_confrim_val')
+			.append(b,y).addClass(y,'my-tools_confrim_btn_box')
+			.append(y,nb).addClass(nb,'my-tools_confrim_btn','my-tools_btn','my-tools_btn_n')
 			.append(y,yb).addClass(yb,'my-tools_alert_btn','my-tools_btn','my-tools_btn_y')
 			.html(c,'x').html(t,'标题').html(v,this.showCode(txt)).html(yb,'确认').html(nb,'取消')
 			.updateStyle(p,"zIndex:"+this.getMaxZIndex()).fadeIn(p).stop(p,'click');
@@ -286,6 +286,7 @@ function MyTools(){
 				this.onclick = null;
 				_this.fadeOut(b,() =>{_this.remove(p);f&&f(this.bool);})
 			})
+		return this;
 	}
 	// 输入型弹窗
 	MyTools.prototype.prompt = function( txt ,f){
@@ -321,6 +322,7 @@ function MyTools(){
 			this.onclick = null;
 			_this.fadeOut(b,() =>{_this.remove(p);f&&f(inp.value);})
 		})
+		return this;
 	}
 	//图片自适应布局
 	MyTools.prototype.pictrueLayer = function(c,f){
@@ -349,6 +351,7 @@ function MyTools(){
 			}
 			_this.addClass(c,'my-tools_scale')
 			f&&fn(c);
+		return this;
 	}
 	// loading样式
 	MyTools.prototype.loading = function(o){
@@ -398,12 +401,12 @@ function MyTools(){
 							},false)
 						}
 					},200)
-					
 				}
 			}
 		};
 		imgShow();
 		window.onscroll = imgShow;
+		return this;
 	}
 	
 	MyTools.prototype.slice = function(o,i,n){
