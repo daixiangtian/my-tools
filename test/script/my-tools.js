@@ -482,7 +482,7 @@ function MyTools(){
 		
 		let cs = p.childrens;
 		
-		let el = _this.create(p.el);
+		let el = _this.create(p.name || 'div');
 		if(p.className)_this.addClass(p.className);
 		if(p.style)_this.updateStyle(el,p.style);
 		if(p.attr)_this.attr(el,p.attr);
@@ -492,7 +492,7 @@ function MyTools(){
 		function createChild( p , j ){
 			j.forEach(v=>{
 				let vs = v.childrens;
-				let el = _this.create(v.el);
+				let el = _this.create( v.name || 'div');
 				if(v.className)_this.addClass(el,v.className);
 				if(v.style)_this.updateStyle(el,v.style);
 				if(v.attr)_this.attr(el,v.attr);

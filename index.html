@@ -18,30 +18,25 @@
 		})
 		myTools.createEntity({
 			parent : document.body,
-			el : 'div',
 			id : 'page',
 			childrens:[
 				{
-					el : 'div',
 					id : 'page-top',
 					childrens : [
 						{
-							el : 'div',
 							className : 'js-name',
 							html : 'my-tools.js'
 						},
 						{
-							el : 'span',
+							name : 'span',
 							className: 'author',
 							html : '戴向天',
 						}
 					]
 				},{
-					el : 'div',
 					id : 'page-content',
 					childrens:[
 						{
-							el : 'div',
 							className : 'page-content_left',
 							childrens(){
 								let arr = ["判断浏览器","引入js/css文件","判断数据类型","更新样式",
@@ -57,7 +52,7 @@
 								
 									for(let i=0;i<len;i++){
 									childrens.push({
-										el:'li',
+										name:'li',
 										className:'method-name',
 										html : arr[i],
 										methods:{
@@ -75,7 +70,6 @@
 								return childrens;
 							}
 						},{
-							el : 'div',
 							className : 'page-content_center',
 							childrens(){
 								let childrens = [];
@@ -83,52 +77,48 @@
 								
 								for(let i=0;i<len;i++){
 									childrens.push({
-										el : 'div',
 										className:'method-details',
 										childrens : [
 											{
-												el : 'div',
 												className:'method-title',
 												html: myToolsDoc[i].name
 											},{
-												el : 'p',
+												name : 'p',
 												className:'method-desc',
 												html : myToolsDoc[i].desc
 											},{
-												el : 'p',
+												name : 'p',
 												className:'method-param',
 												html : '参数描述：'
 											},{
-												el : 'pre',
+												name : 'pre',
 												className : 'method-param_info',
 												html:myToolsDoc[i].param
 											},{
-												el:'p',
+												name:'p',
 												className:'method-code_title',
 												html:'代码：'
 											},{
-												el : 'pre',
+												name : 'pre',
 												className :'method-code',
 												html : myToolsDoc[i].code
 											},{
-												el : 'div',
 												className: 'method-result',
 												childrens:[
 													{
-														el : 'p',
+														name : 'p',
 														className :'method-result_title',
 														html : '返回结果：'
 													},{
-														el : 'pre',
+														name : 'pre',
 														html : myToolsDoc[i].result
 													}
 												]
 											},{
-												el:'div',
 												className:'method-btns',
 												childrens:[
 													{
-														el:'button',
+														name:'button',
 														className : 'method-btns_btn',
 														html : '查看效果'
 													}

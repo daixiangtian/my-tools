@@ -1,0 +1,152 @@
+<html>
+	<head>
+		<title>移动端 -- 探探滑动</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+		<style>
+		*{margin:0;padding:0;list-style:none;}
+		div#box {
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			overflow:hidden;
+		}
+
+		.lis {
+			width: 90%;
+			height: 80%;
+			margin: 0 auto;
+			position: relative;
+		}
+
+		ul.lis>li {
+			height: 100%;
+			position: absolute;
+			top: 0;
+			width: 100%;
+		}
+		
+		.reduction{
+			-webkit-animation:'reduction' 0.3s ease-in-out 0s 1 alternate forwards;
+		}
+		.like{
+			-webkit-animation:'like' 0.3s ease-in-out 0s 1 alternate forwards;
+		}
+		
+		
+		@-webkit-keyframes 'reduction'{
+
+100%{
+ margin-top:0px;
+ margin-left:0px
+}
+}
+
+		@-webkit-keyframes 'like'{
+
+100%{
+ margin-top:0px;
+ margin-left:0px
+}
+}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<ul class="lis">
+				<li style="background:red"></li>
+				<li style="background:green"></li>
+				<li style="background:pink"></li>
+				<li style="background:blue"></li>
+			</ul>
+		</div>
+		
+		<script>
+			let lis = document.querySelectorAll('li'),
+				params={
+					sx:0,
+					sy:0,
+					ex:0,
+					ey:0,
+					dx:0,
+					dy:0,
+					st:0,
+					et:0,
+					ls:0,
+					ts:0
+				};
+				function winSize(){
+					let e = window,a = 'inner';
+					if (!('innerWidth' in window )){ 
+						a = 'client'; 
+						e = document.documentElement || document.body; 
+					};
+					return { width : e[ a+'Width' ] , height : e[ a+'Height' ] }; 
+				}
+				let touch = {
+				
+				start( e ){
+					let touch = e.touches[0];
+					params.sx = touch.pageX; //页面触点X坐标
+					params.sy = touch.pageY; //页面触点Y坐标
+					params.st = new Date().getTime();
+					
+					params.ls = (winSize().width - this.offsetWidth)/2;
+					params.ts = (winSize().height - this.offsetHeight)/2;
+					
+				},
+				move( e ){
+					let touch = e.touches[0];
+					params.ex = touch.pageX; //页面触点X坐标
+					params.ey = touch.pageY; //页面触点Y坐标
+					params.dx = params.ex - params.sx; 
+					params.dy = params.ey - params.sy;
+					this.style.marginLeft = params.dx + "px"
+					this.style.marginTop = params.dy + "px"
+				
+					
+				},
+				end( event ){
+					params.et = new Date().getTime();
+					if(params.et - params.st > 300 || params.dy == 0 || params.dx == 0 ){
+						touch.reduction(this);
+					}else{
+						let r = params.dy / params.dx;
+						let run = setInterval(()=>{
+							params.ey - params.sy < 0?params.dy = params.dy-2:params.dy = params.dy + 2;
+							this.style.marginTop = params.dy + "px";
+							this.style.marginLeft = params.dy / r + "px";
+							if(params.ls + params.dy / r >= winSize().width  
+								|| params.ts + params.dy >= winSize().height
+								|| (params.dy / r <= -(this.offsetWidth + params.ls)
+								) || (params.dy <= -(this.offsetHeight + params.ts))){
+								clearInterval(run);
+								this.parentNode.removeChild(this);
+							}
+						},1)
+						
+						
+						
+					}
+				},
+				reduction( item ){
+					item.classList.add('reduction')
+					setTimeout(()=>{
+						item.style.marginTop = 0+"px";
+						item.style.marginLeft = 0+"px";
+						item.classList.remove('reduction')
+					},310)
+				},
+				
+			}
+			
+			for(let i=0;i<lis.length;i++){
+				lis[i].addEventListener('touchstart',touch.start,false)
+				lis[i].addEventListener('touchmove',touch.move,false)
+				lis[i].addEventListener('touchend',touch.end,false)
+			}
+		</script>
+		
+	</body>
+</html>
