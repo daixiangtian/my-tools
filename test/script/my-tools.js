@@ -474,7 +474,6 @@ function MyTools(){
 			o.addEventListener('touchstart',touch.start)
 			o.addEventListener('touchmove',touch.move)
 			o.addEventListener('touchend',touch.end)
-			
 	}
 	
 	/* 快速创建 */
