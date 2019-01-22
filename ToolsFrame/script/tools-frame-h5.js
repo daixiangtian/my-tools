@@ -100,7 +100,7 @@ function  HTF( p = {} ){
 	
 	//动态加载JS/CSS文件
 	HTF.prototype.loadFile = (p={},fn)=>{
-		if(!p.src && p.href)return false;
+		if(!p.src && !p.href)return false;
 		const as = (p.src || p.href).split('.');
 			let obj = null;
 		as[as.length-1] == 'js'?obj = document.createElement('script'):obj = document.createElement('link');
@@ -147,48 +147,32 @@ function  HTF( p = {} ){
 	}
 	
 	//创建一个有作用域的style标签
-	HTF.prototype.createStyle = (c)=>{
-		
-		console.log(c)
-		
-		let cds = c,
-			_s = "{\n";
-		let arr = [];
-		
-		function labelS(obj){
-			let countS = "";
-			for(let o in obj){
-				let singleS = o+"{\n";
-				
-				for(let os in obj[o]){
-					if(_this.judgeType(obj[o][os]) != 'json'){
-						singleS += "\t"+os+" : "+obj[o][os]+";\n";
-						delete obj[o][os];
+	HTF.prototype.createStyle = (p)=>{
+		if(!p.css)return false;
+		if(!p.obj)return false;
+		let allStyle = "",
+			name = p.obj.nodeName+(p.obj.className&&"."+p.obj.className)+(p.obj.id&&"#"+p.obj.className),
+			at = p.randomCode?"["+p.randomCode+"]":'';
+		function createText(css,name){
+			if(_this.judgeType(css) == 'json'){
+				let cssText = name+at+"{\n",
+					cssArray = [],
+					cssArrayName=[];
+				for(let c in css){
+					if(_this.judgeType(css[c]) == 'json'){
+						cssArray.push(css[c]);
+						cssArrayName.push(c);
+					}else{
+						cssText +=  "\t"+_this.toLowerLine(c,'-')+" : "+css[c]+";\n";
 					}
 				}
-				singleS+="}\n";
-				countS += singleS;
+				cssText += "}\n";
+				allStyle += cssText
+				if(cssArray.length)for(let i=0;i<cssArray.length;i++)createText(cssArray[i],cssArrayName[i]);
 			}
-			console.log(obj);
-			
-			
-			
 		}
-		
-		function sc(c){
-			for(let ci in c){
-				if(_this.judgeType(c[ci]) != 'json'){
-					_s += ("\t"+ci+" : "+c[ci]+";\n");
-					delete c[ci]
-				}
-			}
-			_s += "}\n";
-			console.log(_s);
-			labelS(c);
-			return _s;
-		}
-		sc(cds);	
-		
+		createText(p.css,name)
+		return allStyle;
 	}
 	
 	// 驼峰字符串转横线连接
@@ -205,44 +189,34 @@ function  HTF( p = {} ){
 	
 	function registerCmp(cp){
 		if(!cp)return false;
-		
 		function begin(s){
 			if( _this.judgeType(s) == 'json'){
 				const cmp = s;
 				let cmpTemporaryParent = document.createElement('div'),  //创建一个临时的组件副级元素
 					cmpObj = null;			//当前组件
-		
 				for(let c in cmp){
 					cmpTemporaryParent.innerHTML = cmp[c].content;
 					cmpObj = cmpTemporaryParent.firstElementChild;
-					
 					//开始样式赋值
 					if(cmp[c].style)_this.css(cmpObj,cmp[c].style);
-					
 					if(cmp[c].css){
-						
-						
-						//const at = _this.extract(c,'letter') + _this.getRandomNum(8);
-						const at = "asdasdasda";
+						const at = _this.extract(c,'letter') + _this.getRandomNum(8);
 						cmpObj.setAttribute(at,'');
-						let _st = '{\n',
-							_s = document.createElement('style');
-						const _c = cmp[c].css,
-						cs = _this.getAllEl(cmpObj);
-						cs.forEach(v=>{v.setAttribute(at,'')})
-						
-						_this.createStyle(_c);
-						_st += '}';
-						console.log(_st);
+						_this.getAllEl(cmpObj).forEach(v=>{v.setAttribute(at,'')})
+						const styleObj = document.createElement('style');
+						document.querySelector('head').appendChild(styleObj);
+						styleObj.innerHTML = _this.createStyle({
+							css : cmp[c].css,
+							obj:cmpObj,
+							randomCode : at
+						});
 					}
-					
 					_this.components[c] = cmpObj;
 				}
 			}else{
 				console.log("component's Incorrect format")
 			}
 		}
-		
 		if(_this.judgeType(cp) == 'array')for(let i=0;i<cp.length;i++)begin(cp[i]);
 		//开始替换组件
 		replaceCmp(_this.getAllEl(_this.el));
@@ -291,6 +265,8 @@ function  HTF( p = {} ){
 				if(v.src){
 					isLoad++;
 					if(v.component)p.components = p.components.concat(eval(v.component));
+				}else if(v.href){
+					console.log('加载CSS文件')
 				}
 				//js文件全部加载完毕
 				if(isLoad == jsLen){

@@ -40,7 +40,10 @@ const components = {
 				<li>
 					<span></span>
 				</li>
+				<div></div>
+				<span></span>
 			</ul>
+			
 		`,
 		css:{
 			display:'flex',
@@ -52,11 +55,16 @@ const components = {
 				display:'flex',
 				margin:"0 10px",
 				height:"30px",
-				'span':{
+				span:{
 					width:"100%",
 					height:"100%",
 					background:'yellow'
 				}
+			},
+			div:{
+				background:"red",
+				height:"50px",
+				width:"100%"
 			}
 		}
 	}

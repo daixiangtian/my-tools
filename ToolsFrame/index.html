@@ -3,30 +3,14 @@
 		<title>移动端 -- 前端框架Dome</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 		<script src="./script/tools-frame-h5.js"></script>
-		
-		<style>
-		*{margin:0;padding:0;list-style:none;}
-		span{
-			margin:0 auto;
-			font-size:24px;
-			color:#fff;
-		}
-		UL.btns#btns[asdasdasda]{
-			display : flex;
-			height : 50px;
-			background : blue;
-			border-color : red;
-		}
-		
-		</style>
 	</head>
 	<body>
 		<div id="h5">
-			<htf-header @click="test" @mathAa="sss()" ss=aaa></htf-header>
-			<htf-banner></htf-banner>
-			<htf-buttons></htf-buttons>
-			<div>
-				<span></span>
+			<div class="htf-header">
+				<div>
+					<i class="iconfont icon-back"></i>
+					<span>返回</span>
+				</div>
 			</div>
 		</div>
 	<script>
@@ -37,6 +21,14 @@
 			files:[{
 				src:"./script/components.js",
 				component:'components'
+			},{
+				href:"http://at.alicdn.com/t/font_1027750_rmdh632s6k.css",
+				rel:"stylesheet",
+				type:"text/css"
+			},{
+				href:"./css/components.css",
+				rel:"stylesheet",
+				type:"text/css"
 			}],
 			methods:{
 				test(e){
