@@ -2,7 +2,6 @@
 	<head>
 		<title>移动端 -- 前端框架Dome</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
-		<script src="./script/components.js"></script>
 		<script src="./script/tools-frame-h5.js"></script>
 		
 		<style>
@@ -12,6 +11,12 @@
 			font-size:24px;
 			color:#fff;
 		}
+		UL.btns#btns[asdasdasda]{
+			display : flex;
+			height : 50px;
+			background : blue;
+			border-color : red;
+		}
 		
 		</style>
 	</head>
@@ -19,6 +24,7 @@
 		<div id="h5">
 			<htf-header @click="test" @mathAa="sss()" ss=aaa></htf-header>
 			<htf-banner></htf-banner>
+			<htf-buttons></htf-buttons>
 			<div>
 				<span></span>
 			</div>
@@ -27,11 +33,14 @@
 			
 		const h5 = new HTF({
 			el:'#h5',
-			components,
-			files:['/script/tools-frame-h5.js']
+			components:[],
+			files:[{
+				src:"./script/components.js",
+				component:'components'
+			}],
 			methods:{
 				test(e){
-					console.log(e)
+					console.log(this)
 				},
 			}
 		});

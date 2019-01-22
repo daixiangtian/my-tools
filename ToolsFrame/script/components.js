@@ -24,5 +24,40 @@ const components = {
 			alignItems:'center',
 			background:'pink'
 		}
+	},
+	'htf-buttons':{
+		content:`
+			<ul class="btns" id="btns">
+				<li>
+					<span></span>
+				</li>
+				<li>
+					<span></span>
+				</li>
+				<li>
+					<span></span>
+				</li>
+				<li>
+					<span></span>
+				</li>
+			</ul>
+		`,
+		css:{
+			display:'flex',
+			height:"50px",
+			background:'blue',
+			borderColor:'red',
+			li:{
+				flex:'1',
+				display:'flex',
+				margin:"0 10px",
+				height:"30px",
+				'span':{
+					width:"100%",
+					height:"100%",
+					background:'yellow'
+				}
+			}
+		}
 	}
 }
