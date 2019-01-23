@@ -3,6 +3,12 @@
 		<title>移动端 -- 前端框架Dome</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 		<script src="./script/tools-frame-h5.js"></script>
+		<style>
+		$themeColor:var(--mainColor);
+		div{
+			background:$themeColor;
+		}
+		</style>
 	</head>
 	<body>
 		<div id="h5">
@@ -34,6 +40,9 @@
 				test(e){
 					console.log(this)
 				},
+			},
+			config:{
+				mainColor:'green'
 			}
 		});
 	

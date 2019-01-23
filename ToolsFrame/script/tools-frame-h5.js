@@ -279,6 +279,19 @@ function  HTF( p = {} ){
 		}):null
 	}
 	
-	registerFiel(p.files);
+	function registerConfig(config){
+		if(_this.judgeType(config) !='json')return false;
+		for(let c in config){
+			switch(c){
+				case 'mainColor':
+				console.log(c,config[c]);
+				document.documentElement.style.setProperty('--mainColor',config[c]);
+				break;
+			}
+		}
+		registerFiel(p.files);
+	}
+	registerConfig(p.config);
+	
 	
 }
