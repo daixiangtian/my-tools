@@ -199,10 +199,21 @@ function  HTF( p = {} ){
 		return t;
 	}
 	
+	// 横线连接的字符串转小驼峰
+	HTF.prototype.toHump = (s,l = "_")=>{
+		let t = '';
+		 s.split(l || "-").map((item,index)=>{
+			index >0?t += item.slice(0, 1).toUpperCase() + item.slice(1):t+=item;
+		}).join('');
+		return t;
+	}
+	
+	// 注册函数
 	function registerMethod(methods){
 		if(methods && _this.judgeType(methods) == 'json')for(let m in methods)_this.judgeType(methods[m]) == 'function'?_this[m] = methods[m]:console.log(m+' not a function');
 	}
 	
+	//注册组件
 	function registerCmp(cp){
 		if(!cp)return false;
 		function begin(s){
@@ -240,6 +251,7 @@ function  HTF( p = {} ){
 		replaceCmp(_this.getAllEl(_this.el));
 	}
 	
+	//将组件还原
 	function replaceCmp(){
 		const arrEl = _this.getAllEl(_this.el);
 			len = arrEl.length;
@@ -267,6 +279,13 @@ function  HTF( p = {} ){
 		})
 	}
 	
+	// 返回一个函数
+	function antetype(t){
+		return function(){
+			return t;
+		};
+	}
+	
 	// 注册文件
 	function registerFiel(fs){
 		if(!fs){
@@ -289,26 +308,24 @@ function  HTF( p = {} ){
 						registerCmp(p.components);
 					}
 				}
-				
 			});
 		}):_this.judgeType(fs) == 'json'?_this.loadFile(v,function(){
 			
 		}):null
 	}
 	
+	//注册配置
 	function registerConfig(config){
-		if(_this.judgeType(config) !='json')return false;
+		if(!_this.judgeType(config,'json'))return false;
 		for(let c in config){
 			switch(c){
 				case 'mainColor':
-				console.log(c,config[c]);
 				document.documentElement.style.setProperty('--mainColor',config[c]);
 				break;
 			}
+			_this[c]?console.log(c+" is exist in HTF "): _this[c] = antetype(config[c])
 		}
 		registerFiel(p.files);
 	}
 	registerConfig(p.config);
-	
-	
 }
