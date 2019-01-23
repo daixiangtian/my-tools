@@ -7,6 +7,22 @@ function  HTF( p = {} ){
 	// HTF 对象
 	const _this = this;
 	
+	// 页面尺寸初始化 - 淘宝
+	! function(e, t) {
+		var n = t.documentElement,
+			d = e.devicePixelRatio || 1;
+
+		function i() {
+			var e = n.clientWidth / 3.75;
+			n.style.fontSize = e + "px"
+		}
+		if (function e() { t.body ? t.body.style.fontSize = "16px" : t.addEventListener("DOMContentLoaded", e) }(), i(), e.addEventListener("resize", i), e.addEventListener("pageshow", function(e) { e.persisted && i() }), d >= 2) {
+			var o = t.createElement("body"),
+				a = t.createElement("div");
+			a.style.border = ".5px solid transparent", o.appendChild(a), n.appendChild(o), 1 === a.offsetHeight && n.classList.add("hairlines"), n.removeChild(o)
+		}
+	}(window, document)
+	
 	if(!p.el)return console.log("default parameters el,el is dome element");
 	
 	this.el = document.querySelector(p.el),
@@ -190,11 +206,13 @@ function  HTF( p = {} ){
 	function registerCmp(cp){
 		if(!cp)return false;
 		function begin(s){
+			
 			if( _this.judgeType(s) == 'json'){
 				const cmp = s;
 				let cmpTemporaryParent = document.createElement('div'),  //创建一个临时的组件副级元素
 					cmpObj = null;			//当前组件
 				for(let c in cmp){
+					if(_this.components[c])break;
 					cmpTemporaryParent.innerHTML = cmp[c].content;
 					cmpObj = cmpTemporaryParent.firstElementChild;
 					//开始样式赋值
@@ -256,7 +274,6 @@ function  HTF( p = {} ){
 			registerCmp(p.components);
 			return false;
 		}
-		
 		let jsLen = 0,
 			isLoad = 0;
 		_this.judgeType(fs) == 'array'?fs.map((v,i)=>{
@@ -265,14 +282,14 @@ function  HTF( p = {} ){
 				if(v.src){
 					isLoad++;
 					if(v.component)p.components = p.components.concat(eval(v.component));
-				}else if(v.href){
-					console.log('加载CSS文件')
+					v.methods&&registerMethod(eval(v.methods));
+					//js文件全部加载完毕
+					if(isLoad == jsLen){
+						registerMethod(p.methods);
+						registerCmp(p.components);
+					}
 				}
-				//js文件全部加载完毕
-				if(isLoad == jsLen){
-					registerMethod(p.methods);
-					registerCmp(p.components);
-				}
+				
 			});
 		}):_this.judgeType(fs) == 'json'?_this.loadFile(v,function(){
 			

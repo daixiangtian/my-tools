@@ -3,30 +3,24 @@
 		<title>移动端 -- 前端框架Dome</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 		<script src="./script/tools-frame-h5.js"></script>
-		<style>
-		$themeColor:var(--mainColor);
-		div{
-			background:$themeColor;
-		}
-		</style>
 	</head>
 	<body>
 		<div id="h5">
-			<div class="htf-header">
-				<div>
-					<i class="iconfont icon-back"></i>
-					<span>返回</span>
-				</div>
-			</div>
+			<htf-header @click="test" title="这个是头部信息"></htf-header>
 		</div>
 	<script>
-			
+		
+		let a = [1,2,3];
 		const h5 = new HTF({
 			el:'#h5',
 			components:[],
+			data:{
+				title:'这个是头部信息'
+			},
 			files:[{
 				src:"./script/components.js",
-				component:'components'
+				component:'components',
+				methods:'methods'
 			},{
 				href:"http://at.alicdn.com/t/font_1027750_rmdh632s6k.css",
 				rel:"stylesheet",
@@ -42,10 +36,9 @@
 				},
 			},
 			config:{
-				mainColor:'green'
+				
 			}
 		});
-	
 	
 	</script>
 	</body>

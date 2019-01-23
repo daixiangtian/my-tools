@@ -4,12 +4,37 @@ const components = {
 	'htf-header':{
 		content : `
 			<div class="htf-header">
-				这个是页眉
+				<div class="min-box-50 center">
+					<i class="iconfont icon-back"></i>
+					<span>返回</span>
+				</div>
+				<div class="htf-header__title">
+					<p class="font-size-x">{{title}}</p>
+				</div>
+				<div class="min-box-50 center">
+					<font><i class="iconfont icon-more"></i></font>
+				</div>
 			</div>
 		`,
-		style:{
-			height:"50px",
-			background:'red'
+		css:{
+			'display':'flex',
+			'height':'49px',
+			'border-bottom':'1px solid var(--borderColor)',
+			'background':  'var(--mainColor)',
+			'justify-content': 'space-between',
+			'overflow':'hidden',
+			'div':{
+				'display': 'flex',
+				'align-items': 'center'
+			},
+			'.htf-header__title':{
+				'font-size':'var(--fontSizeX)'
+			},
+			'.htf-header__title>p':{
+				'height':'24px',
+				'overflow':'hidden',
+				'padding':'0 10px'
+			}
 		}
 	},
 	'htf-banner':{
@@ -69,3 +94,10 @@ const components = {
 		}
 	}
 }
+
+let methods = {
+	a(){
+		console.log("this is a function")
+	}
+}
+

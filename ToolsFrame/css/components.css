@@ -1,5 +1,26 @@
-*{margin:0;padding:0;list-style:none;font-family:"微软雅黑";color:"#333";font-size:12px}
+*{margin:0;padding:0;list-style:none;font-family:"微软雅黑";color:#333;font-size:12px}
 
-div{
-	background:var(--mainColor);
+:root {
+  --mainColor: #ff7675;
+  --color1: #fbfee9;
+  --color2: #5a4446;
+  --color3: #8baca1;
+  --color4: #ffeec4;
+  --borderColor: #eee;
+  --fontSizeX:18px;
+}
+
+.font-size-x{
+	font-size:var(--fontSizeX)
+}
+
+.center{
+	display:flex;
+	align-items:center;
+	justify-content: center;
+}
+
+.min-box-50{
+	min-width:50px;
+	min-height:50px;
 }
