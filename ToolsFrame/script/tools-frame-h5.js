@@ -1,32 +1,40 @@
-
 // H5工具框架 == 》 html5 tool frame
 // author : 戴向天
-
+// Tips: 在写样式的是建议使用rem为单位，
 function  HTF( p = {} ){
-	
+	{
+		// 页面尺寸初始化 - 淘宝
+		! function(e, t) {
+			var n = t.documentElement,
+				d = e.devicePixelRatio || 1;
+			function i() {
+				var e = n.clientWidth / 3.75;
+				n.style.fontSize = e + "px"
+			}
+			if (function e() { t.body ? t.body.style.fontSize = "16px" : t.addEventListener("DOMContentLoaded", e) }(), i(), e.addEventListener("resize", i), e.addEventListener("pageshow", function(e) { e.persisted && i() }), d >= 2) {
+				var o = t.createElement("body"),
+					a = t.createElement("div");
+				a.style.border = ".5px solid transparent", o.appendChild(a), n.appendChild(o), 1 === a.offsetHeight && n.classList.add("hairlines"), n.removeChild(o)
+			}
+		}(window, document)
+	}
+
 	// HTF 对象
 	const _this = this;
 	
-	// 页面尺寸初始化 - 淘宝
-	! function(e, t) {
-		var n = t.documentElement,
-			d = e.devicePixelRatio || 1;
-
-		function i() {
-			var e = n.clientWidth / 3.75;
-			n.style.fontSize = e + "px"
-		}
-		if (function e() { t.body ? t.body.style.fontSize = "16px" : t.addEventListener("DOMContentLoaded", e) }(), i(), e.addEventListener("resize", i), e.addEventListener("pageshow", function(e) { e.persisted && i() }), d >= 2) {
-			var o = t.createElement("body"),
-				a = t.createElement("div");
-			a.style.border = ".5px solid transparent", o.appendChild(a), n.appendChild(o), 1 === a.offsetHeight && n.classList.add("hairlines"), n.removeChild(o)
-		}
-	}(window, document)
-	
 	if(!p.el)return console.log("default parameters el,el is dome element");
 	
-	this.el = document.querySelector(p.el),
-	this.components = {};
+	// HTF 变量代码块
+	{
+		this.el = document.querySelector(p.el);
+		// HTF的组件集
+		this.components = new Object(null);
+		// HTF的变量集
+		this.variables= new Object(null);
+		// HTF的常量集
+		this.state = new Object(null);
+	}
+	
 	
 	// 判断数据类型
 	HTF.prototype.judgeType = (obj)=>{
@@ -208,6 +216,17 @@ function  HTF( p = {} ){
 		return t;
 	}
 	
+	// Browser environment sniffing 代码来源VUE
+	var inBrowser = typeof window !== 'undefined';
+	var UA = inBrowser && window.navigator.userAgent.toLowerCase();
+	var isIE = UA && /msie|trident/.test(UA);
+	var isIE9 = UA && UA.indexOf('msie 9.0') > 0;
+	var isEdge = UA && UA.indexOf('edge/') > 0;
+	var isAndroid = UA && UA.indexOf('android') > 0;
+	var isIOS = UA && /iphone|ipad|ipod|ios/.test(UA);
+	var isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge;
+	
+	  
 	// 注册函数
 	function registerMethod(methods){
 		if(methods && _this.judgeType(methods) == 'json')for(let m in methods)_this.judgeType(methods[m]) == 'function'?_this[m] = methods[m]:console.log(m+' not a function');
@@ -217,7 +236,6 @@ function  HTF( p = {} ){
 	function registerCmp(cp){
 		if(!cp)return false;
 		function begin(s){
-			
 			if( _this.judgeType(s) == 'json'){
 				const cmp = s;
 				let cmpTemporaryParent = document.createElement('div'),  //创建一个临时的组件副级元素
@@ -233,6 +251,7 @@ function  HTF( p = {} ){
 						cmpObj.setAttribute(at,'');
 						_this.getAllEl(cmpObj).forEach(v=>{v.setAttribute(at,'')})
 						const styleObj = document.createElement('style');
+							styleObj.setAttribute('htf-css','');
 						document.querySelector('head').appendChild(styleObj);
 						styleObj.innerHTML = _this.createStyle({
 							css : cmp[c].css,
@@ -247,6 +266,9 @@ function  HTF( p = {} ){
 			}
 		}
 		if(_this.judgeType(cp) == 'array')for(let i=0;i<cp.length;i++)begin(cp[i]);
+		
+		//将用户在组件里面有使用主题样式就进行替换
+		replaceCssText();
 		//开始替换组件
 		replaceCmp(_this.getAllEl(_this.el));
 	}
@@ -269,7 +291,7 @@ function  HTF( p = {} ){
 							const methodName = a.key.replace(a.key.toString().charAt(0),'').trim();
 							if(_this[a.value.split('(')[0]],a.value.split('(')[0]){
 								cmp.addEventListener(methodName,function(){
-									_this[a.value.split('(')[0]]()
+									a.value.indexOf("(")>=0?_this[a.value.split('(')[0]]():_this[a.value]();
 								},false)
 							}
 						}
@@ -314,18 +336,52 @@ function  HTF( p = {} ){
 		}):null
 	}
 	
+	//替换style标签里面的内容
+	function replaceCssText(){
+		const mainCss = _this.mainCss;
+		let html = '';
+		document.querySelectorAll('style[htf-css]').forEach(v=>{
+			html = v.innerHTML;
+			for(let mc in mainCss)html.indexOf(mc)>=0 && (html = html.split('$'+mc).join('var(--'+mc+')'));
+			v.innerHTML = html;
+			v.removeAttribute('htf-css');
+		})
+	}
+	
+	// 将得到的数据都进行赋值到css :root属性里面
+	function registerCss(css){
+		_this.mainCss = new Object(null);
+		if(!_this.judgeType(css,'json'))return;
+		for(let c in css){
+			// 赋值样式
+			document.documentElement.style.setProperty('--'+c,css[c]);
+			_this.mainCss[c] = css[c];
+		}
+		// 替换样式
+		replaceCssText();
+	}
+	
+	
+	//变量重新赋值 变量赋值则是与组件进行绑定的
+	function assignmentVariable(){
+		
+	}
+	
 	//注册配置
 	function registerConfig(config){
 		if(!_this.judgeType(config,'json'))return false;
 		for(let c in config){
 			switch(c){
-				case 'mainColor':
-				document.documentElement.style.setProperty('--mainColor',config[c]);
+				case 'mainCss':
+				registerCss(config[c])
 				break;
 			}
 			_this[c]?console.log(c+" is exist in HTF "): _this[c] = antetype(config[c])
 		}
-		registerFiel(p.files);
 	}
-	registerConfig(p.config);
+	(function(){
+		registerConfig(p.config);
+		registerFiel(p.files);
+	})()
+	
 }

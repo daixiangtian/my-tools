@@ -1,28 +1,29 @@
 <html>
 	<head>
-		<title>移动端 -- 前端框架Dome</title>
+		<title>移动端 -- HTF框架</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 		<script src="./script/tools-frame-h5.js"></script>
 	</head>
 	<body>
-		<div id="h5">
-			<htf-header @click="test" title="这个是头部信息"></htf-header>
-		</div>
+		<htf-header @click="test" title="这个是头部信息"></htf-header>
+		<htf-content>
+			<slot :path="testPath" ></slot>
+		</htf-content>
+		<htf-footer></htf-footer>
 	<script>
-		
-		let a = [1,2,3];
-		const h5 = new HTF({
-			el:'#h5',
+		new HTF({
+			el:'body',
 			components:[],
 			data:{
-				title:'这个是头部信息'
+				title:'这个是头部信息',
+				testPath:'/index'
 			},
 			files:[{
 				src:"./script/components.js",
 				component:'components',
 				methods:'methods'
 			},{
-				href:"http://at.alicdn.com/t/font_1027750_rmdh632s6k.css",
+				href:"http://at.alicdn.com/t/font_1027750_9fb4s7opr5c.css",
 				rel:"stylesheet",
 				type:"text/css"
 			},{
@@ -36,10 +37,29 @@
 				},
 			},
 			config:{
-				mainColor:'green'
-			}
+				mainCss:{
+					mainColor:'green',
+					fontSize:'12px'
+				}
+			},
+			router:[
+				{
+					meta:{title:'首页'},
+					path:'/index',
+				},{
+					meta:{title:'发布'},
+					path:'/release'
+				},{
+					meta:{title:'我的'},
+					path:'/personal'
+				}
+			]
 		});
 	
+	
+	
+	
+			
 	</script>
 	</body>
 	
