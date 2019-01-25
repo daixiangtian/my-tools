@@ -1,3 +1,4 @@
+
 <html>
 	<head>
 		<title>移动端 -- HTF框架</title>
@@ -5,23 +6,21 @@
 		<script src="./script/tools-frame-h5.js"></script>
 	</head>
 	<body>
-		<htf-header @click="test" title="这个是头部信息"></htf-header>
-		<htf-content>
-			<slot :path="testPath" ></slot>
-		</htf-content>
+		<htf-header @click="test" :title="title" ></htf-header>
+		<htf-content :router="testPath"></htf-content>
 		<htf-footer></htf-footer>
 	<script>
 		new HTF({
-			el:'body',
-			components:[],
+			el:'body',// 附属元素
+			components:[],// 组件集
 			data:{
 				title:'这个是头部信息',
 				testPath:'/index'
 			},
+			// 引入外部文件
 			files:[{
 				src:"./script/components.js",
 				component:'components',
-				methods:'methods'
 			},{
 				href:"http://at.alicdn.com/t/font_1027750_9fb4s7opr5c.css",
 				rel:"stylesheet",
@@ -31,17 +30,21 @@
 				rel:"stylesheet",
 				type:"text/css"
 			}],
+			// 方法定义
 			methods:{
 				test(e){
+					// 返回的是 HTF对象
 					console.log(this)
 				},
 			},
 			config:{
+				// 配置主题样式
 				mainCss:{
-					mainColor:'green',
+					mainColor:'rgb(51,151,255)',
 					fontSize:'12px'
 				}
 			},
+			// 路由
 			router:[
 				{
 					meta:{title:'首页'},
@@ -55,13 +58,8 @@
 				}
 			]
 		});
-	
-	
-	
-	
+		
 			
 	</script>
-	</body>
-	
-	
+</body>
 </html>

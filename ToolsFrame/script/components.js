@@ -6,10 +6,10 @@ const components = {
 			<div class="htf-header">
 				<div class="min-box-50 back">
 					<i class="iconfont icon-back"></i>
-					<span>返回</span>
+					<span>@{back}</span>
 				</div>
 				<div class="htf-header_title">
-					<span>HTF</span>
+					<span>@{  title   }</span>
 				</div>
 				<div class="min-box-50 auxiliary">
 					<font><i class="iconfont icon-more auxiliary-icon"></i></font>
@@ -33,14 +33,15 @@ const components = {
 			},
 			'.htf-header_title':{
 				'font-size':'var(--fontSizeX)',
+				'span':{
+					'height':'0.24rem',
+					'overflow':'hidden',
+					'width':'2rem',
+					'text-align':'center',
+					'lineHeight':'0.24rem',
+					'color':'#fff'
+				},
 				
-			},
-			'.htf-header_title>span':{
-				'height':'0.24rem',
-				'overflow':'hidden',
-				'width':'2rem',
-				'text-align':'center',
-				'lineHeight':'0.24rem'
 			},
 			'.min-box-50':{
 				'min-width':"0.5rem",
@@ -65,24 +66,17 @@ const components = {
 					'font-size':'24px'
 				}
 			}
-		}
+		},
+		data:{
+			title:'这个是标题',
+			back:'返回'
+		},
+		
 	},
 	'htf-content':{
 		content:`
 			<div class="htf-container">
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
-				<p>这是内容部分</p>
+				<slot></slot>
 			</div>
 		`,
 		css:{
@@ -92,13 +86,14 @@ const components = {
 			'min-height':'calc(100% - 1rem)',
 			'p':{
 				background:'pink',
-				height:'0.5rem',
-				fontSize:'18px',
-				marginBottom:'10px',
+				height:'0.4rem',
+				fontSize:'14px',
+				marginBottom:'13px',
 				textAlign:'center',
-				lineHeight:'0.5rem'
+				lineHeight:'0.4rem'
 			}
-		}
+		},
+		
 	},
 	'htf-footer':{
 		content:`
@@ -147,12 +142,33 @@ const components = {
 				}
 			},
 		}
-	}
-}
-
-let methods = {
-	a(){
-		console.log("this is a function")
+	},
+	'index':{
+		content:`
+			<div id="index">
+				<span>这个是Index页面</span>
+			</div>
+		`,
+		css:{
+			'display':'flex',
+			'align-items':'center',
+			'justify-content':'center',
+			'width':'100%',
+			'height':'100%',
+			span:{
+				'font-size':'24px',
+			}
+		},
+		props:['text'],
+	},
+	'htf-test':{
+		content:`
+			<div></div>
+		`,
+		style:{
+			background:'red',
+			height:'50px'
+		}
 	}
 }
 
