@@ -57,7 +57,7 @@ function  HTF( p = {} ){
 		}
 	}
 	
-	
+	// 该函数运行的是行内样式
 	HTF.prototype.css = (o,s)=>{
 		if(!o)return false;
 		if(this.judgeType(s) == 'json'){

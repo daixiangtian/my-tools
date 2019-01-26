@@ -84,26 +84,41 @@ HTF
 
 2019-01-25 ===》 已实现
 
-data 设计模型：
+data methods components 设计模型：
 
 
 	按照模版来进行划分
 	
-	
-		每一个模版都有相对应的 Data
+		每一个模版都有相对应的 Data ，methods
 		
 		假设：
 			A 模版 有定义data属性
 			
 				data:{
 					name:'A模版',
+				},
+				methods : {
+					// 访问的根目录里面的功能
+					...mapAction(['methods1','methods2',...]),
+				},
+				components:{
+					...mapSlot(['cmpName1','cmpName2',...])
 				}
 				
 			B 模版 有定义data属性
 			
 				data:{
 					name:'A模版'
+				},
+				methods : {
+					// 访问的是置顶功能集里面的指定功能，
+					...mapAction('actionName',['methods1','methods2',...]),
+				},
+				components:{
+					...mapSlot(['cmpName1','cmpName2',...])
 				}
+				
+				
 		
 		
 		HTF 就会将每个模版定义的data值进行储存 
@@ -111,7 +126,12 @@ data 设计模型：
 			储存方式
 			
 			this.data[模版名] 
+			methods
 			
 			这样就不会出现data取值错误
 			
+			
+
+	
+
 			
