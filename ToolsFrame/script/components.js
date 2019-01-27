@@ -2,7 +2,7 @@
 
 const components = {
 	'htf-header':{
-		content : `
+		template : `
 			<div class="htf-header">
 				<div class="min-box-50 back">
 					<i class="iconfont icon-back"></i>
@@ -71,10 +71,15 @@ const components = {
 			title:'这个是标题',
 			back:'返回'
 		},
+		methods:{
+			test(){
+				console.log(this);
+			}
+		}
 		
 	},
 	'htf-content':{
-		content:`
+		template:`
 			<div class="htf-container">
 				<slot></slot>
 			</div>
@@ -96,7 +101,7 @@ const components = {
 		
 	},
 	'htf-footer':{
-		content:`
+		template:`
 			<div class="htf-footer">
 				<ul class="htf-footer_list">
 					<li>
@@ -144,7 +149,7 @@ const components = {
 		}
 	},
 	'index':{
-		content:`
+		template:`
 			<div id="index">
 				<span>这个是Index页面</span>
 			</div>
@@ -162,7 +167,7 @@ const components = {
 		props:['text'],
 	},
 	'htf-test':{
-		content:`
+		template:`
 			<div></div>
 		`,
 		style:{

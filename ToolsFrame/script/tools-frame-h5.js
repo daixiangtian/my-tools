@@ -29,32 +29,59 @@ function  HTF( p = {} ){
 		this.el = document.querySelector(p.el);
 		// HTF的组件集
 		this.components = new Object(null);
+		// HTF的组件结果集
+		this.resultMapComponents = new Object(null);
 		// HTF的变量集
 		this.variables= new Object(null);
 		// HTF的常量集
 		this.state = new Object(null);
 		// HTF的数据集
-		this.data = new Object(null)
+		this.data = new Object(null);
+		// HTF的功能集
+		this.mapAction = new Object(null);
+		
+		// HTH的组件入口集
+		// 该对象是将每一个组件都以组件名进行存储
+		/** cmpName : {
+				data:{
+					...自己的变量集
+				},
+				methods:{
+					...自己的功能集
+				},
+				// 该方法是可以引入其它组件模版
+				introduce:['cmpName01',cmpName02',...],
+				// 该方法是可以得到指定组件的method并继承
+				extends:{
+					'cmpName':['method01','method02','method03']
+				}
+				
+			}
+		*/
+		this.mapEntry = new Object(null)
+		
 	}
 	
 	
 	// 判断数据类型
-	HTF.prototype.judgeType = (obj)=>{
+	HTF.prototype.judgeType = (obj,str)=>{
+		let type = '';
 		if(Object.prototype.toString.call(obj) === '[object Array]'){
-			return 'array';
+			type = 'array';
 		}else if(obj === true || obj === false){
-			return 'boolean';
+			type = 'boolean';
 		}else if(!isNaN(obj)){
-			return 'number'
+			type = 'number'
 		}else if(obj instanceof HTMLElement){
-			return "dom";
+			type = "dom";
 		}else if(obj instanceof Map){
-			return "map";
+			type = "map";
 		}else if(typeof(obj) == "object" && Object.prototype.toString.call(obj).toLowerCase() == "[object object]" && !obj.length){
-			return "json"
+			type = "json"
 		}else{
-			return typeof(obj)
+			type = typeof(obj)
 		}
+		return str?type === str:type;
 	}
 	
 	// 该函数运行的是行内样式
@@ -72,6 +99,8 @@ function  HTF( p = {} ){
 	// 替换dome元素
 	HTF.prototype.replaceDom = ( o ,n )=>{
 		if(!o)return this;
+		console.log(o.parentNode)
+		console.log(n)
 		let p = o.parentNode;
 			p&&p.insertBefore(n,o);
 			p&&p.removeChild(o);
@@ -181,13 +210,21 @@ function  HTF( p = {} ){
 	HTF.prototype.createStyle = (p)=>{
 		if(!p.css)return false;
 		if(!p.obj)return false;
+		
+		const at = _this.extract(p.letter,'letter') + _this.getRandomNum(8),
+			styleObj = document.createElement('style');
+			console.log(p.obj);
+			p.obj.setAttribute(at,'');
+			_this.getAllEl(p.obj).forEach(v=>{v.setAttribute(at,'')});
+			styleObj.setAttribute('htf-css','');
+			document.querySelector('head').appendChild(styleObj);
+			
 		let allStyle = "",
-			name = p.obj.nodeName+(p.obj.className&&"."+p.obj.className)+(p.obj.id&&"#"+p.obj.className),
-			at = p.randomCode?"["+p.randomCode+"]":'';
+			name = p.obj.nodeName+(p.obj.className&&"."+p.obj.className)+(p.obj.id&&"#"+p.obj.className);
 		function createText(css,n,p=''){
 			if(_this.judgeType(css) == 'json'){
 				n = p?p+" "+n:n;
-				let cssText = n+at+"{\n",
+				let cssText = n+'['+at+']'+'{\n',
 					cssArray = [],
 					cssArrayName=[];
 				for(let c in css){
@@ -203,7 +240,8 @@ function  HTF( p = {} ){
 				if(cssArray.length)for(let i=0;i<cssArray.length;i++)createText(cssArray[i],cssArrayName[i],n);
 			}
 		}
-		createText(p.css,name)
+		createText(p.css,name);
+		styleObj.innerHTML = allStyle;
 		return allStyle;
 	}
 	
@@ -224,6 +262,23 @@ function  HTF( p = {} ){
 		return t;
 	}
 	
+	// 设置mapAction，还功能组要是做函数功能集
+	// 通过组件名来进行绑定
+	HTF.prototype.setMapAction = (cmpName,actions) => {
+		!hasOwn(this.mapAction,cmpName)
+			?this.mapAction[cmpName] = actions
+				:console.warn('The component set name already exists. Replace the new component set name. Binding failed')
+	}
+		
+	// 把字符串直接转换为标准的dom对象
+	 function parseDom(arg) {
+	　　 var objE = document.createElement("div");
+	　　 objE.innerHTML = arg;
+	　　 return objE.firstElementChild;
+
+	};
+	
+	
 	//匹配HTF变量的正则
 	var cmpValRE = /(@{.*?})+/;
 	
@@ -238,13 +293,12 @@ function  HTF( p = {} ){
 		return  (res&&{
 			field:res,
 			original : resCopy[0]
-		}) || false;
+		}) || null;
 	}
 	
 	//替换变量值 @{value}
 	// 参数说明： 模版的名称，需要替换的索引值，数据
-	function updateHTFValue(cmpName,str){
-		let data = _this.data[cmpName]
+	function updateHTFValue(data,str){
 		if(data)while(res = hasHTFValue(str))str = str.replace(res.original,data[res.field]);
 		return str;
 	}
@@ -254,25 +308,52 @@ function  HTF( p = {} ){
 		if(methods && _this.judgeType(methods) == 'json')for(let m in methods)_this.judgeType(methods[m]) == 'function'?_this[m] = methods[m]:console.log(m+' not a function');
 	}
 	
+	// 函数与组件进行绑定
+	function methodsBindCom(cmp,methods){
+		
+	}
 	//注册组件
 	function registerCmp(cp){
 		if(!cp)return false;
-		function begin(s){
+		function begin(s,p){
 			if( _this.judgeType(s) == 'json'){
 				const cmp = s;
-				let cmpTemporaryParent = document.createElement('div'),  //创建一个临时的组件父级元素
 					cmpObj = null;			//当前组件
 				for(let c in cmp){
-					// 如果该组件的名称已在模版里面有了，这就不能再进行添加
-					if(_this.components[c]) continue;
+					
+					const entry =  _this.mapEntry[c] = cp[p][c];
+					
+					if(entry.template){
+						let tmp = entry.template;
+						tmp = hasHTFValue(tmp)&&entry.data&&updateHTFValue(entry.data,tmp);
+						//将已渲染好的组件内容进行添加进临时的父级元素
+						if(tmp){
+							// tmp进行实例化成dom元素
+							tmp = parseDom(tmp);
+							console.log(tmp);
+							// 添加行内样式
+							entry.style&&_this.css(tmp,entry.style);
+							entry.css&&_this.createStyle({
+								css : entry.css,
+								obj:tmp,
+								letter:c
+							});
+						}
+					}
+					
+					
+					/*
+					//给该组件绑定它自己actions
+					cp[p][c].methods&&_this.setMapAction(c,cp[p][c].methods);
+					
 					//如果该组件有data数据变量的时候，就将该组件数据变量进行赋值进HTF里面去
 					cmp[c].data&&(_this.data[c] = cmp[c].data);
+					
 					// 重新赋值给一个变量，因为原型模版内容是不能进行变化,否则就变成了一次性模版了
 					let con = cmp[c].content;
 					//如果有HTF变量，就进行替换
 					hasHTFValue(cmp[c].content)&&( con = updateHTFValue(c,cmp[c].content));
-					//将已渲染好的组件内容进行添加进临时的父级元素
-					cmpTemporaryParent.innerHTML = con;
+					
 					//实例化出一个dom对象
 					cmpObj = cmpTemporaryParent.firstElementChild;
 					//开始样式赋值
@@ -290,18 +371,27 @@ function  HTF( p = {} ){
 							randomCode : at
 						});
 					}
-					_this.components[c] = cmpObj;
+					
+					if(!hasOwn(_this.resultMapComponents,p)){
+						_this.resultMapComponents[p] = new Object(null);
+					}
+					_this.resultMapComponents[p][c] = cmpObj;
+					*/
 				}
 			}else{
-				console.log("component's Incorrect format")
+				console.log("component's Incorrect format");
+				return null;
 			}
 		}
-		if(_this.judgeType(cp) == 'array')for(let i=0;i<cp.length;i++)begin(cp[i]);
-		
+		if(_this.judgeType(cp,'array')){
+			for(let i=0;i<cp.length;i++)begin(cp[i])
+		}else if(_this.judgeType(cp,'json')){
+			for(let c in cp)begin(cp[c],c);
+		}
 		//将用户在组件里面有使用主题样式就进行替换
 		replaceCssText();
 		//开始替换组件
-		replaceCmp(_this.getAllEl(_this.el));
+		replaceCmp();
 	}
 	
 	//将组件还原
@@ -311,9 +401,16 @@ function  HTF( p = {} ){
 		arrEl.map(v=>{
 			const solt =v.querySelector('slot');
 			if(!solt){
-				const nodeName = v.nodeName.toLocaleLowerCase();
-				if(_this.components[nodeName]){
-					const cmp = _this.components[nodeName];
+				const nodeName = v.nodeName.toLocaleLowerCase(),
+					entrys = _this.mapEntry;
+					
+				for(let entry in entrys){
+					
+					if(!hasOwn(entrys,nodeName))return;
+					
+					_this.replaceDom(v,parseDom(entrys[entry].template));
+					/*
+					const cmp = _this.resultMapComponents[vm][nodeName];
 					_this.replaceDom(v,cmp);
 					const arrAttr = _this.getAllAttr(v);
 					if(arrAttr.length){
@@ -324,17 +421,27 @@ function  HTF( p = {} ){
 								const methodName = a.key.replace(a.key.toString().charAt(0),'').trim();
 								if(_this[a.value.split('(')[0]],a.value.split('(')[0]){
 									cmp.addEventListener(methodName,function(){
-										a.value.indexOf("(")>=0?_this[a.value.split('(')[0]]():_this[a.value]();
+										const Mname = a.value.indexOf("(")>=0?a.value.split('(')[0]:a.value;
+										hasOwn( _this.mapAction[nodeName],Mname)?_this.mapAction[nodeName][Mname]():console.warn(`
+											${nodeName} component has not ${Mname} function
+										`)
 									},false)
 								}
 							}
 						})
 					}
+					*/
 				}
+				
 			}else{
 				console.log('含有子组件');
 			}
 		})
+	}
+	
+	//判断是否含有指定的key值
+	function hasOwn(json,key){
+		return json.hasOwnProperty(key);
 	}
 	
 	// 返回一个函数
@@ -358,12 +465,18 @@ function  HTF( p = {} ){
 			_this.loadFile(v,function(){
 				if(v.src){
 					isLoad++;
-					if(v.component)p.components = p.components.concat(eval(v.component));
-					v.methods&&eval(v.methods)&&registerMethod(eval(v.methods));
+					try{
+						v.component&&hasOwn(_this.components,v.component)
+							?console.warn('The component set name already exists. Replace the new component set name')
+								:_this.components[v.component] = eval(v.component);
+						v.methods&&registerMethod(eval(v.methods));
+					}catch(e){
+						console.warn(e);
+					}
 					//js文件全部加载完毕
 					if(isLoad == jsLen){
 						registerMethod(p.methods);
-						registerCmp(p.components);
+						registerCmp(_this.components);
 					}
 				}
 			});
