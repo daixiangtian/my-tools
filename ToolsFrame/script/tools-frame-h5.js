@@ -97,10 +97,8 @@ function  HTF( p = {} ){
 	}
 	
 	// 替换dome元素
-	HTF.prototype.replaceDom = ( o ,n )=>{
+	HTF.prototype.replaceDom = ( o ,n)=>{
 		if(!o)return this;
-		console.log(o.parentNode)
-		console.log(n)
 		let p = o.parentNode;
 			p&&p.insertBefore(n,o);
 			p&&p.removeChild(o);
@@ -210,12 +208,10 @@ function  HTF( p = {} ){
 	HTF.prototype.createStyle = (p)=>{
 		if(!p.css)return false;
 		if(!p.obj)return false;
-		
-		const at = _this.extract(p.letter,'letter') + _this.getRandomNum(8),
+		if(!p.at)return false;
+		const at = p.at,
 			styleObj = document.createElement('style');
-			console.log(p.obj);
-			p.obj.setAttribute(at,'');
-			_this.getAllEl(p.obj).forEach(v=>{v.setAttribute(at,'')});
+			
 			styleObj.setAttribute('htf-css','');
 			document.querySelector('head').appendChild(styleObj);
 			
@@ -308,6 +304,12 @@ function  HTF( p = {} ){
 		if(methods && _this.judgeType(methods) == 'json')for(let m in methods)_this.judgeType(methods[m]) == 'function'?_this[m] = methods[m]:console.log(m+' not a function');
 	}
 	
+	// json继承
+	function extendJSon(obj,json){
+		if(_this.judgeType(json,'json') && _this.judgeType(obj,'json'))for(let j in json)obj[j] = json[j];
+		return obj;
+	}
+	
 	// 函数与组件进行绑定
 	function methodsBindCom(cmp,methods){
 		
@@ -320,63 +322,29 @@ function  HTF( p = {} ){
 				const cmp = s;
 					cmpObj = null;			//当前组件
 				for(let c in cmp){
-					
 					const entry =  _this.mapEntry[c] = cp[p][c];
-					
 					if(entry.template){
 						let tmp = entry.template;
-						tmp = hasHTFValue(tmp)&&entry.data&&updateHTFValue(entry.data,tmp);
+						hasHTFValue(tmp)&&entry.data&&(tmp = updateHTFValue(entry.data,tmp));
 						//将已渲染好的组件内容进行添加进临时的父级元素
 						if(tmp){
 							// tmp进行实例化成dom元素
 							tmp = parseDom(tmp);
-							console.log(tmp);
+							entry.randomAt = _this.extract(c,'letter') + _this.getRandomNum(8);
+							tmp.setAttribute(entry.randomAt,'');
+							_this.getAllEl(tmp).forEach(v=>{v.setAttribute(entry.randomAt,'')});
+							
+							entry.template = tmp.outerHTML;
 							// 添加行内样式
 							entry.style&&_this.css(tmp,entry.style);
 							entry.css&&_this.createStyle({
 								css : entry.css,
 								obj:tmp,
-								letter:c
+								letter:c,
+								at : entry.randomAt
 							});
 						}
 					}
-					
-					
-					/*
-					//给该组件绑定它自己actions
-					cp[p][c].methods&&_this.setMapAction(c,cp[p][c].methods);
-					
-					//如果该组件有data数据变量的时候，就将该组件数据变量进行赋值进HTF里面去
-					cmp[c].data&&(_this.data[c] = cmp[c].data);
-					
-					// 重新赋值给一个变量，因为原型模版内容是不能进行变化,否则就变成了一次性模版了
-					let con = cmp[c].content;
-					//如果有HTF变量，就进行替换
-					hasHTFValue(cmp[c].content)&&( con = updateHTFValue(c,cmp[c].content));
-					
-					//实例化出一个dom对象
-					cmpObj = cmpTemporaryParent.firstElementChild;
-					//开始样式赋值
-					if(cmp[c].style)_this.css(cmpObj,cmp[c].style);
-					if(cmp[c].css){
-						const at = _this.extract(c,'letter') + _this.getRandomNum(8);
-						cmpObj.setAttribute(at,'');
-						_this.getAllEl(cmpObj).forEach(v=>{v.setAttribute(at,'')})
-						const styleObj = document.createElement('style');
-							styleObj.setAttribute('htf-css','');
-						document.querySelector('head').appendChild(styleObj);
-						styleObj.innerHTML = _this.createStyle({
-							css : cmp[c].css,
-							obj:cmpObj,
-							randomCode : at
-						});
-					}
-					
-					if(!hasOwn(_this.resultMapComponents,p)){
-						_this.resultMapComponents[p] = new Object(null);
-					}
-					_this.resultMapComponents[p][c] = cmpObj;
-					*/
 				}
 			}else{
 				console.log("component's Incorrect format");
@@ -394,48 +362,55 @@ function  HTF( p = {} ){
 		replaceCmp();
 	}
 	
+	// 组件注册事件
+	function cmpRegister(tmp,nodeName,arrAttr){
+		const arry = ['@'];
+		arrAttr.map(a=>{
+			if(arry.indexOf(a.key.toString().charAt(0)) > -1){
+				const methodName = a.key.replace(a.key.toString().charAt(0),'').trim();
+				tmp.addEventListener(methodName,function(){
+					const Mname = a.value.indexOf("(")>=0?a.value.split('(')[0]:a.value;
+					let temporary = new Object(null);
+						temporary = extendJSon(temporary,_this.mapEntry[nodeName].methods || {});
+						temporary = extendJSon(temporary, _this.mapEntry[nodeName].data || {});
+					temporary[Mname]();
+				},false)
+			}
+		})
+	}
+	
+	function slotChange(){
+		
+	}
+	
 	//将组件还原
 	function replaceCmp(){
 		const arrEl = _this.getAllEl(_this.el);
 			len = arrEl.length;
 		arrEl.map(v=>{
-			const solt =v.querySelector('slot');
-			if(!solt){
-				const nodeName = v.nodeName.toLocaleLowerCase(),
-					entrys = _this.mapEntry;
-					
-				for(let entry in entrys){
-					
-					if(!hasOwn(entrys,nodeName))return;
-					
-					_this.replaceDom(v,parseDom(entrys[entry].template));
-					/*
-					const cmp = _this.resultMapComponents[vm][nodeName];
-					_this.replaceDom(v,cmp);
-					const arrAttr = _this.getAllAttr(v);
-					if(arrAttr.length){
-						// 开始事件赋值
-						const arry = ['@']
-						arrAttr.map(a=>{
-							if(arry.indexOf(a.key.toString().charAt(0)) > -1){
-								const methodName = a.key.replace(a.key.toString().charAt(0),'').trim();
-								if(_this[a.value.split('(')[0]],a.value.split('(')[0]){
-									cmp.addEventListener(methodName,function(){
-										const Mname = a.value.indexOf("(")>=0?a.value.split('(')[0]:a.value;
-										hasOwn( _this.mapAction[nodeName],Mname)?_this.mapAction[nodeName][Mname]():console.warn(`
-											${nodeName} component has not ${Mname} function
-										`)
-									},false)
-								}
-							}
-						})
-					}
-					*/
-				}
-				
-			}else{
-				console.log('含有子组件');
+			
+			const childs = _this.getAllEl(v)
+			if(childs.length){
+				const slot = v.querySelectorAll('slot');
+				slot.forEach(item=>{
+					console.log(item)
+					const cmpName = item.getAttribute('name')
+					cmpName&&_this.mapEntry[cmpName]&&_this.replaceDom(slot,parseDom(_this.mapEntry[cmpName].template));
+				})
 			}
+			const nodeName = v.nodeName.toLocaleLowerCase(),
+				entrys = _this.mapEntry;
+				if(!hasOwn(entrys,nodeName))return;
+				let tmp = parseDom(entrys[nodeName].template);
+				_this.replaceDom(v,tmp);
+				const arrAttr = _this.getAllAttr(v);
+				arrAttr.length&&cmpRegister(tmp,nodeName,arrAttr);
+				
+				const slots = v.querySelectorAll('slot');
+				slots.forEach(item=>{
+					// end 2019-01-28
+				})
+			
 		})
 	}
 	

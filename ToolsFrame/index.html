@@ -7,10 +7,12 @@
 	</head>
 	<body>
 		<htf-header @click="test" :title="title" ></htf-header>
-		<htf-content :router="testPath"></htf-content>
+		<htf-container :router="testPath">
+			<slot name="index"></slot>
+		</htf-container>
 		<htf-footer></htf-footer>
 	<script>
-		new HTF({
+		let h5 = new HTF({
 			el:'body',// 附属元素
 			components:[],// 组件集
 			data:{

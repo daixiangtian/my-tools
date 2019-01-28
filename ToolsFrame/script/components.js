@@ -78,12 +78,13 @@ const components = {
 		}
 		
 	},
-	'htf-content':{
+	'htf-container':{
 		template:`
-			<div class="htf-container">
-				<slot></slot>
-			</div>
+			<div class="htf-container"></div>
 		`,
+		data:{
+			
+		},
 		css:{
 			'padding-top':'0.5rem',
 			'padding-bottom':'0.5rem',
